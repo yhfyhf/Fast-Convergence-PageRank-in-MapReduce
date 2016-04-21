@@ -4,16 +4,16 @@ package BlockPageRank;
  * Created by Christina on 4/16/20.
  */
 public class Node {
-    private String id;
+    private int id;
     private float oldPageRank;
     private float newPageRank = 0;
     private float nextPageRank = 0; // nextPageRank = newPageRank / (number of desNodeInBlock)
     private float pageRankFromOutBlock = 0;
     private String desNodeIds = "";
     private String desNodeInBlock = "";
-    private int degree = 1;
+    private int degree = 0;
 
-    public Node(String id) {
+    public Node(int id) {
         this.id = id;
     }
 
@@ -46,7 +46,7 @@ public class Node {
         this.nextPageRank = nextPageRank;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 

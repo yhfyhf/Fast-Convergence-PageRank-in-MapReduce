@@ -1,6 +1,6 @@
 import Conf.Conf;
-import SimplePageRank.PageRankMapper;
-import SimplePageRank.PageRankReducer;
+import BlockPageRank.PageRankMapper;
+import BlockPageRank.PageRankReducer;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;

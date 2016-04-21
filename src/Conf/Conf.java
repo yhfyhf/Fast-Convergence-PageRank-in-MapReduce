@@ -14,7 +14,7 @@ public class Conf {
 
 
     public static final int NODES_NUM = 685230;
-    public static final int MAPREDUCE_ITERATION = 6;
+    public static final int MAPREDUCE_ITERATION = 6; //6
     public static final float DAMPING_FACTOR = 0.85f;
     public static final float RANDOM_JUMP_FACTOR = (1 - DAMPING_FACTOR) / NODES_NUM;
     public static final float RESIDUAL_ERROR = 0.001f;
@@ -33,10 +33,11 @@ public class Conf {
             616148, 626448, 636240, 646022, 655804, 665666, 675448, 685230 };
 
     public static String getBlockId(String nodeId) {
-        int nodeIdInt = Integer.parseInt(nodeId);
-        int blockId = (int) Math.floor(nodeIdInt / 10000);
-        blockId = nodeIdInt < BLOCK_BOUNDARIES[blockId] ? blockId - 1 : blockId;
-        return String.valueOf(blockId);
+//        int nodeIdInt = Integer.parseInt(nodeId);
+//        int blockId = (int) Math.floor(nodeIdInt / 10000);
+//        blockId = nodeIdInt < BLOCK_BOUNDARIES[blockId] ? blockId - 1 : blockId;
+//        return String.valueOf(blockId);
+        return "1";
     }
 
 }
