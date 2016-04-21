@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by Christina on 4/18/16.
  */
-public class PRMapper extends Mapper<LongWritable, Text, Text, Text> {
+public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
     /**
      * keyIn:
      * valueIn: srcNodeId;desNodeId1,desNodeId2...;srcNodePageRank;

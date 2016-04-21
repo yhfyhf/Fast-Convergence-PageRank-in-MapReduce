@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * Created by Christina on 4/18/16.
  */
-public class PRReducer extends Reducer<Text, Text, Text, Text> {
+public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
     /**
      * keyIn: srcNodeId
      * valueIn: NEXTPAGERANK;nextPageRank;
