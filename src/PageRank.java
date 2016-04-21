@@ -1,5 +1,6 @@
-package SimplePageRank;
-
+import Conf.Conf;
+import SimplePageRank.PRMapper;
+import SimplePageRank.PRReducer;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -18,8 +19,8 @@ public class PageRank {
             Job job = new Job();
             job.setJobName(Conf.FILE_NAME + (i + 1));
             job.setJarByClass(PageRank.class);
-            job.setMapperClass(PageRankMapper.class);
-            job.setReducerClass(PageRankReducer.class);
+            job.setMapperClass(PRMapper.class);
+            job.setReducerClass(PRReducer.class);
             job.setMapOutputKeyClass(Text.class);
             job.setMapOutputValueClass(Text.class);
 
@@ -27,7 +28,6 @@ public class PageRank {
             String outputPath = path + (i + 1);
             FileInputFormat.addInputPath(job, new Path(inputPath));
             FileOutputFormat.setOutputPath(job, new Path(outputPath));
-
 
             job.waitForCompletion(true);
 

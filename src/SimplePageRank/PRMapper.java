@@ -1,5 +1,6 @@
 package SimplePageRank;
 
+import Conf.Conf;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -9,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by Christina on 4/18/16.
  */
-public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
+public class PRMapper extends Mapper<LongWritable, Text, Text, Text> {
     /**
      * keyIn:
      * valueIn: srcNodeId;desNodeId1,desNodeId2...;srcNodePageRank;

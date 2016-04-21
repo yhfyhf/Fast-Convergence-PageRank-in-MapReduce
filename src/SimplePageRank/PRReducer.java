@@ -1,5 +1,6 @@
 package SimplePageRank;
 
+import Conf.Conf;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
@@ -8,7 +9,7 @@ import java.io.IOException;
 /**
  * Created by Christina on 4/18/16.
  */
-public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
+public class PRReducer extends Reducer<Text, Text, Text, Text> {
     /**
      * keyIn: srcNodeId
      * valueIn: NEXTPAGERANK;nextPageRank;
