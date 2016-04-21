@@ -13,6 +13,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class PageRankRunner {
     public static void main (String[] args) throws Exception {
         String path = args[0] + "data/" + Conf.FILE_NAME;
+
         for (int i = 0; i < Conf.ITERATIONS_NUM; i++) {
             System.out.println("Iteration num: " + i);
 

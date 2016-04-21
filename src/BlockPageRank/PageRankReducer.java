@@ -53,6 +53,13 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             }
         }
 
+
+
+
+
+
+
+
         Text keyOut = new Text("");
         Text valueOut;
         for (String nodeId : nodesMap.keySet()) {
@@ -61,5 +68,8 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             context.write(keyOut, valueOut);
             System.out.println("[ PRReducer ] key: " + keyOut + "value: " + valueOut);
         }
+
+
+
     }
 }
