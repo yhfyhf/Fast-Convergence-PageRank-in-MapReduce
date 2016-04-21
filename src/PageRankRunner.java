@@ -14,7 +14,7 @@ public class PageRankRunner {
     public static void main (String[] args) throws Exception {
         String path = args[0] + "data/" + Conf.FILE_NAME;
 
-        for (int i = 0; i < Conf.ITERATIONS_NUM; i++) {
+        for (int i = 0; i < Conf.MAPREDUCE_ITERATION; i++) {
             System.out.println("Iteration num: " + i);
 
             Job job = new Job();

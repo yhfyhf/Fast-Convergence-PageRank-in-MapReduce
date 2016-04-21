@@ -55,6 +55,12 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             }
         }
 
+        int iterNum = 0;
+        float residualErr = Float.MAX_VALUE;
+        while (iterNum++ < Conf.INBLOCK_ITERRATION && residualErr < Conf.RESIDUAL_ERROR) {
+            residualErr = iterateBlockOnce();
+        }
+
         Text keyOut = new Text("");
         Text valueOut;
         for (String nodeId : nodesMap.keySet()) {
@@ -66,18 +72,22 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
     }
 
     /**
-     * newPageRank = nextPageRank from inBlock node + nextPageRank from out Block node
-     * The nextPageRank from inBlock node is constant, so reset the newPageRank = nextPageRank from outBlock
+     * newPageRank = nextPageRank from inBlock nodes + nextPageRank from outBlock nodes
+     * The nextPageRank from outBlock nodes is constant, so reset the newPageRank = nextPageRank from outBlock
      * then add the nextPageRank from inBlock
      * */
-    private void iterateBlockOnce() {
+    private float iterateBlockOnce() {
+        Map<String, Float> startPageRankMap = new HashMap<>();
+        float residuals = 0;
+
         //set nextPageRank and newPageRank for each node
         for (Node node : nodesMap.values()) {
+            startPageRankMap.put(node.getId(), node.getNewPageRank());
             node.setNextPageRank(node.getNewPageRank() / node.getDegree());
             node.setNewPageRank(node.getPageRankFromOutBlock());
         }
 
-        //get the updated newPageRank
+        //get the updated newPageRank considering the nextPageRank from inBlock nodes
         for (Node srcNode : nodesMap.values()) {
             String[] desNodeIds = srcNode.getDesNodeInBlock().split(",");
             float nextPageRank = srcNode.getNextPageRank();
@@ -87,10 +97,16 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             }
         }
 
-        //damping factor
+        //update newPageRank considering the damping factor and calculate the residual
         for (Node node : nodesMap.values()) {
             float updatedPageRank = node.getNextPageRank() * Conf.DAMPING_FACTOR + Conf.RANDOM_JUMP_FACTOR;
             node.setNewPageRank(updatedPageRank);
+            float startPageRank = startPageRankMap.get(node.getId());
+            float endPageRank = node.getNewPageRank();
+            residuals += (startPageRank - endPageRank) / endPageRank;
         }
+
+        //return the avg of residuals
+        return residuals / nodesMap.size();
     }
 }
