@@ -4,19 +4,22 @@ package Conf;
  * Created by Christina on 4/16/16.
  */
 public class Conf {
+    public static final String FILE_NAME = "simplepagerank_";
+
     public static final int NODEINFO = 0;
     public static final int NEXTPAGERANK = 1;
-    public static final int EDGE_OUTCBLOCK = 2;
     public static final int EDGE_INCBLOCK = 3;
     public static final int NEXTPAGERANK_FROM_INBLOCK = 4;
     public static final int NEXTPAGERANK_FROM_OUTBLOCK = 5;
 
 
-
-    public static final String FILE_NAME = "simplepagerank_";
-
     public static final int NODES_NUM = 685230;
     public static final int ITERATIONS_NUM = 6;
+    public static final float DAMPING_FACTOR = 0.85f;
+    public static final float RANDOM_JUMP_FACTOR = (1 - DAMPING_FACTOR) / NODES_NUM;
+
+
+
     private static final int[] BLOCK_BOUNDARIES = { 0, 10328, 20373, 30629, 40645,
             50462, 60841, 70591, 80118, 90497, 100501, 110567, 120945,
             130999, 140574, 150953, 161332, 171154, 181514, 191625, 202004,
