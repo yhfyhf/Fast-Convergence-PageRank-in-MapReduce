@@ -15,16 +15,16 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
      * valueIn: srcNodeId;desNodeId1,desNodeId2...;srcNodePageRank;
      *
      * keyOut: blockId
-     * valueOut: NEXTPAGERANK;desNodeId;nextPageRank;
+     * valueOut: NEXTPAGERANK_FROM_INBLOCK;desNodeId;nextPageRank;
+     * Or
+     * keyOut: blockId
+     * valueOut: NEXTPAGERANK_FROM_OUTBLOCK;desNodeId;nextPageRank;
      * Or
      * keyOut: blockId
      * valueOut: NODEINFO;srcNodeId;desNodeId1,desNodeId2...;srcOldNodePageRank;
      * Or
      * keyOut:blockId
      * valueOut: EDGE_INCBLOCK;srcNodeId;desNodeIdInBlock1,desNodeIdInBlock2...;
-     * Or
-     * keyOut:blockId
-     * valueOut: EDGE_OUTCBLOCK;srcNodeId;desNodeIdOutBlock1,desNodeIdOutBlock2...;
      */
     public void map(LongWritable keyIn, Text valueIn, Mapper.Context context)
             throws IOException, InterruptedException {
@@ -69,11 +69,6 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
 
         //emit the edge in block
         valueOut = new Text(Conf.Conf.EDGE_INCBLOCK + ";" + srcNodeId + ":" + edgeInBlock);
-        context.write(keyOut, valueOut);
-        System.out.println("[ PRMapper ] key: " + keyOut + ", value: " + valueOut);
-
-        //emit the edge out block
-        valueOut = new Text(Conf.Conf.EDGE_OUTCBLOCK + ";" + srcNodeId + ":" + edgeOutBlock);
         context.write(keyOut, valueOut);
         System.out.println("[ PRMapper ] key: " + keyOut + ", value: " + valueOut);
     }

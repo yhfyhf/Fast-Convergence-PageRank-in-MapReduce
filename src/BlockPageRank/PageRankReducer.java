@@ -36,7 +36,7 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             String nodeId = temp[1];
             nodesMap.putIfAbsent(nodeId, new Node(nodeId));
             Node node = nodesMap.get(nodeId);
-            switch (temp[0]) {
+            switch (Integer.parseInt(temp[0])) {
                 case Conf.Conf.NODEINFO:
                     node.setDesNodeIds(temp[2].trim());
                     node.setOldPageRank(Float.parseFloat(temp[3].trim()));
@@ -58,8 +58,6 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
 
 
 
-
-
         Text keyOut = new Text("");
         Text valueOut;
         for (String nodeId : nodesMap.keySet()) {
@@ -68,7 +66,17 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             context.write(keyOut, valueOut);
             System.out.println("[ PRReducer ] key: " + keyOut + "value: " + valueOut);
         }
+    }
 
+    private void iterateBlockOnce() {
+        //set nextPageRank and newPageRank for each node
+        for (Node node : nodesMap.values()) {
+            int numOfDesNode = node.getDesNodeInBlock().split(",").length;
+            node.setNewPageRank(node.getNewPageRank() / numOfDesNode);
+            node.setNewPageRank(0.0f);
+        }
+
+        //get the updated newPageRank
 
 
     }

@@ -7,9 +7,11 @@ public class Node {
     private String id;
     private float oldPageRank;
     private float newPageRank = 0;
+    private float nextPageRank = 0; // nextPageRank = newPageRank / (number of desNodeInBlock)
     private String desNodeIds;
     private String desNodeInBlock = "";
     private String desNodeOutBlock = "";
+    private int degree;
 
     public Node(String id) {
         this.id = id;
@@ -17,6 +19,7 @@ public class Node {
 
     public void setDesNodeIds(String desNodeIds) {
         this.desNodeIds = desNodeIds;
+        this.degree = desNodeIds.split(",").length;
     }
 
     public void setOldPageRank(float oldPageRank) {
@@ -35,6 +38,10 @@ public class Node {
         this.desNodeOutBlock = desNodeOutBlock;
     }
 
+    public void setNewPageRank(float nextPageRank) {
+        this.nextPageRank = nextPageRank;
+    }
+
     public String getId() {
         return id;
     }
@@ -51,12 +58,20 @@ public class Node {
         return oldPageRank;
     }
 
+    public float getNextPageRank() {
+        return nextPageRank;
+    }
+
     public String getDesNodeInBlock() {
         return desNodeInBlock;
     }
 
     public String getDesNodeOutBlock() {
         return desNodeOutBlock;
+    }
+
+    public int getDegree() {
+        return degree;
     }
 
 }

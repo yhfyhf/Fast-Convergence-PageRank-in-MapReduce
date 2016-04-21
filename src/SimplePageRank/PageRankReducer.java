@@ -31,7 +31,7 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         while (valuesIn.iterator().hasNext()) {
             Text valueIn = valuesIn.iterator().next();
             String[] temp = valueIn.toString().split(";");
-            switch (temp[0]) {
+            switch (Integer.parseInt(temp[0])) {
                 case Conf.NODEINFO:
                     desNodeIds = temp[1];
                     oldPageRank = Float.parseFloat(temp[2].trim());

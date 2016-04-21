@@ -4,10 +4,15 @@ package Conf;
  * Created by Christina on 4/16/16.
  */
 public class Conf {
-    public static final String NODEINFO = "nodeInfo";
-    public static final String NEXTPAGERANK = "nextPageRank";
-    public static final String EDGE_OUTCBLOCK = "edgeInBlock";
-    public static final String EDGE_INCBLOCK = "edgeOutBlock";
+    public static final int NODEINFO = 0;
+    public static final int NEXTPAGERANK = 1;
+    public static final int EDGE_OUTCBLOCK = 2;
+    public static final int EDGE_INCBLOCK = 3;
+    public static final int NEXTPAGERANK_FROM_INBLOCK = 4;
+    public static final int NEXTPAGERANK_FROM_OUTBLOCK = 5;
+
+
+
     public static final String FILE_NAME = "simplepagerank_";
 
     public static final int NODES_NUM = 685230;
