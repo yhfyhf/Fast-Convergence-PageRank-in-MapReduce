@@ -37,7 +37,9 @@ public class Conf {
 //        int blockId = (int) Math.floor(nodeIdInt / 10000);
 //        blockId = nodeIdInt < BLOCK_BOUNDARIES[blockId] ? blockId - 1 : blockId;
 //        return String.valueOf(blockId);
-        return nodeId;
+        int nodeIdInt = Integer.parseInt(nodeId);
+
+        return String.valueOf(nodeIdInt % 3);
     }
 
 }
