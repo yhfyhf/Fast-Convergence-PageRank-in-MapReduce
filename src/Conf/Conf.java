@@ -39,7 +39,7 @@ public class Conf {
 //        return String.valueOf(blockId);
         int nodeIdInt = Integer.parseInt(nodeId);
 
-        return String.valueOf(nodeIdInt % 3);
+        return String.valueOf(nodeIdInt % 2);
     }
 
 }
