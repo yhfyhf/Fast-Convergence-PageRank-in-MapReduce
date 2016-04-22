@@ -35,7 +35,7 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         System.out.println("!!This reducer blockId: " + keyIn);
         while (valuesIn.iterator().hasNext()) {
             Text valueIn = valuesIn.iterator().next();
-//            System.out.println("!!keyIn: " + keyIn.toString() + " valueIn: " + valueIn.toString());
+            System.out.println("!!keyIn: " + keyIn.toString() + " valueIn: " + valueIn.toString());
             String[] temp = valueIn.toString().split(";");
             int nodeId = Integer.parseInt(temp[1].trim());
             nodesMap.putIfAbsent(nodeId, new Node(nodeId));
@@ -61,11 +61,12 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             }
         }
 
-//        int iterNum = 0;
-//        float residualErr = Float.MAX_VALUE;
-//        while (iterNum++ < Conf.INBLOCK_ITERRATION && residualErr < Conf.RESIDUAL_ERROR) {
-//            residualErr = iterateBlockOnce();
-//        }
+        int iterNum = 0;
+        float residualErr = Float.MAX_VALUE;
+        while (iterNum++ < Conf.INBLOCK_ITERRATION && residualErr > Conf.RESIDUAL_ERROR) {
+            residualErr = iterateBlockOnce(nodesMap);
+            System.out.println("!!!residual: " + residualErr);
+        }
 
         Text keyOut = new Text("");
         Text valueOut;
@@ -89,8 +90,8 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         //set nextPageRank and newPageRank for each node
         for (Node node : nodesMap.values()) {
             startPageRankMap.put(node.getId(), node.getNewPageRank());
-            //check if the node has desNodeId
-            //if not, keep the original pageRank
+
+            //check if the node has desNode
             if (!node.getDesNodeId().isEmpty()) {
                 node.setNextPageRank(node.getNewPageRank() / node.getDegree());
                 node.setNewPageRank(node.getPageRankFromOutBlock());
@@ -99,9 +100,15 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
 
         //get the updated newPageRank considering the nextPageRank from inBlock nodes
         for (Node srcNode : nodesMap.values()) {
+            //check if the node has desNodeInBlock
+            if (srcNode.getDesNodeInBlock().isEmpty()) {
+                continue;
+            }
             String[] desNodeIds = srcNode.getDesNodeInBlock().split(",");
             float nextPageRank = srcNode.getNextPageRank();
-            for (String desNodeId : desNodeIds) {
+
+            for (String desNodeIdString : desNodeIds) {
+                int desNodeId = Integer.valueOf(desNodeIdString);
                 Node desNode = nodesMap.get(desNodeId);
                 desNode.addNewPageRank(nextPageRank);
             }
@@ -113,7 +120,7 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             node.setNewPageRank(updatedPageRank);
             float startPageRank = startPageRankMap.get(node.getId());
             float endPageRank = node.getNewPageRank();
-            residuals += (startPageRank - endPageRank) / endPageRank;
+            residuals += Math.abs(startPageRank - endPageRank) / endPageRank;
         }
 
         //return the avg of residuals
