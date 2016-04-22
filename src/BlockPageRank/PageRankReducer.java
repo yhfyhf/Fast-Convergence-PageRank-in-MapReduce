@@ -12,7 +12,7 @@ import java.util.Map;
  * Created by Christina on 4/20/16.
  */
 public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
-    Map<Integer, Node> nodesMap = new HashMap<>();
+
     /**
      * keyIn: blockId
      * valueIn: NEXTPAGERANK_FROM_INBLOCK;desNodeId;nextPageRank;
@@ -31,6 +31,8 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
      */
     protected void reduce(Text keyIn, Iterable<Text> valuesIn, Context context)
             throws IOException, InterruptedException {
+        Map<Integer, Node> nodesMap = new HashMap<>();
+        System.out.println("!!This reducer blockId: " + keyIn);
         while (valuesIn.iterator().hasNext()) {
             Text valueIn = valuesIn.iterator().next();
 //            System.out.println("!!keyIn: " + keyIn.toString() + " valueIn: " + valueIn.toString());
@@ -80,7 +82,7 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
      * The nextPageRank from outBlock nodes is constant, so reset the newPageRank = nextPageRank from outBlock
      * then add the nextPageRank from inBlock
      * */
-    private float iterateBlockOnce() {
+    private float iterateBlockOnce(Map<Integer, Node> nodesMap) {
         Map<Integer, Float> startPageRankMap = new HashMap<>();
         float residuals = 0;
 

@@ -47,12 +47,14 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
         //check if it has desNode
         //if not, emit srcNode and its pageRank
         if (desNodeIds.length == 0 || desNodeIds[0].isEmpty()) {
+            keyOut = new Text(srcBlockId);
             valueOut = new Text(Conf.Conf.NEXTPAGERANK_FROM_INBLOCK + ";" + srcNodeId + ";" + nextPageRank + ";");
             context.write(keyOut, valueOut);
             System.out.println("[ PRMapper ] key: " + keyOut + ", value: " + valueOut);
         } else {
             for (String desNodeId : desNodeIds) {
                 String desBlockId = Conf.Conf.getBlockId(desNodeId);
+                keyOut = new Text(desBlockId);
                 if (srcBlockId.equals(desBlockId)) {
                     edgeInBlock += desNodeId + ",";
                     valueOut = new Text(Conf.Conf.NEXTPAGERANK_FROM_INBLOCK +";" + desNodeId + ";" + nextPageRank + ";");
@@ -66,6 +68,7 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
         }
 
         //emit the edge in block
+        keyOut = new Text(srcBlockId);
         valueOut = new Text(Conf.Conf.EDGE_INCBLOCK + ";" + srcNodeId + ";" + edgeInBlock + ";");
         context.write(keyOut, valueOut);
         System.out.println("[ PRMapper ] key: " + keyOut + ", value: " + valueOut);
