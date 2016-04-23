@@ -38,7 +38,7 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
         float srcNodePageRank = Float.parseFloat(temp[2].trim());
         int srcNodeDegree = desNodeIds.length;
         float nextPageRank = srcNodePageRank / srcNodeDegree;
-        String srcBlockId = Conf.Conf.getBlockId(srcNodeId);
+        String srcBlockId = getBlockId(srcNodeId);
         String edgeInBlock = "";
 
         //emit the node info
@@ -56,7 +56,7 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
             System.out.println("[ PRMapper ] key: " + keyOut + ", value: " + valueOut);
         } else {
             for (String desNodeId : desNodeIds) {
-                String desBlockId = Conf.Conf.getBlockId(desNodeId);
+                String desBlockId = getBlockId(desNodeId);
                 keyOut = new Text(desBlockId);
                 if (srcBlockId.equals(desBlockId)) {
                     edgeInBlock += desNodeId + ",";
@@ -75,5 +75,9 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
         valueOut = new Text(Conf.Conf.EDGE_INCBLOCK + ";" + srcNodeId + ";" + edgeInBlock + ";");
         context.write(keyOut, valueOut);
         System.out.println("[ PRMapper ] key: " + keyOut + ", value: " + valueOut);
+    }
+
+    protected String getBlockId(String nodeId) {
+        return Conf.Conf.getBlockId(nodeId);
     }
 }

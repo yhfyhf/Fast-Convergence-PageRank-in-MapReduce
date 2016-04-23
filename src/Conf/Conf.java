@@ -14,6 +14,7 @@ public class Conf {
 
 
     public static final int NODES_NUM = 685230;
+    public static final int BLOCKS_NUM = 68;
     public static final int MAPREDUCE_ITERATION = 6; //6
     public static final float DAMPING_FACTOR = 0.85f; //0.85f
     public static final float RANDOM_JUMP_FACTOR = (1 - DAMPING_FACTOR) / NODES_NUM;
@@ -41,5 +42,11 @@ public class Conf {
 
         return String.valueOf(nodeIdInt % 2);
     }
+
+    public static String getBlockIdRandom(String nodeId) {
+//        return String.valueOf(nodeId.hashCode() % BLOCKS_NUM);
+        return "1";
+    }
+
 
 }
