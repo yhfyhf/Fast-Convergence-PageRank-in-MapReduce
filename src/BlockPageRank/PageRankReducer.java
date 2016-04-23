@@ -83,7 +83,7 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
      * The nextPageRank from outBlock nodes is constant, so reset the newPageRank = nextPageRank from outBlock
      * then add the nextPageRank from inBlock
      * */
-    private float iterateBlockOnce(Map<Integer, Node> nodesMap) {
+    protected float iterateBlockOnce(Map<Integer, Node> nodesMap) {
         Map<Integer, Float> startPageRankMap = new HashMap<>();
         float residuals = 0;
 
