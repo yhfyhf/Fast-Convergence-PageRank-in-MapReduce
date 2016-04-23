@@ -7,15 +7,13 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import java.io.IOException;
-
 /**
  * Created by Christina on 4/23/16.
  */
 public class PageRankRunner {
-    public static void main(String[] args)
-            throws IOException, ClassNotFoundException, InterruptedException {
+    public static void main (String[] args) throws Exception {
         String path = args[0] + "data/" + Conf.FILE_NAME;
+        float residual = 0;
 
         for (int i = 0; i < Conf.MAPREDUCE_ITERATION; i++) {
             System.out.println("Iteration num: " + i);
@@ -34,8 +32,11 @@ public class PageRankRunner {
             FileOutputFormat.setOutputPath(job, new Path(outputPath));
 
             job.waitForCompletion(true);
-
+            float localResidual = job.getCounters().findCounter(SimplePageRank.Counter.RESIDUAL_COUNTER).getValue() / 1000000;
+            residual += localResidual;
+            System.out.println("!!! iteration-" + i + ":" + localResidual);
         }
+        System.out.println("!!! average residual:" + residual / Conf.NODES_NUM);
         System.out.println("Map reduce done!");
     }
 }
