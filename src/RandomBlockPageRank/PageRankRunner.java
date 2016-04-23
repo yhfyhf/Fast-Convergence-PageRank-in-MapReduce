@@ -34,7 +34,7 @@ public class PageRankRunner {
 
             job.waitForCompletion(true);
 
-            float localResidual = job.getCounters().findCounter(SimplePageRank.Counter.RESIDUAL_COUNTER).getValue() / 1000000;
+            float localResidual = job.getCounters().findCounter(Counter.RESIDUAL_COUNTER).getValue() / 1000000;
             residual += localResidual;
             System.out.println("!!! iteration-" + i + ":" + localResidual);
         }

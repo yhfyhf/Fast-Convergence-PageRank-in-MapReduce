@@ -75,8 +75,8 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             valueOut = new Text(nodeId + ";" + node.getDesNodeId() + ";" + node.getNewPageRank() + ";");
             context.write(keyOut, valueOut);
 
-            context.getCounter(Counter.RESIDUAL_COUNTER).increment((long)
-                    Math.abs(node.getNewPageRank() - node.getOldPageRank()) * 1000000);
+            context.getCounter(Counter.RESIDUAL_COUNTER).increment(
+                    (long) (Math.abs(node.getNewPageRank() - node.getOldPageRank()) * 1000000));
 
             System.out.println("[ PRReducer ] key: " + keyOut + "value: " + valueOut);
         }

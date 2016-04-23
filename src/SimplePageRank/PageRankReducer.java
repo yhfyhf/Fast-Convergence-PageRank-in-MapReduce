@@ -46,7 +46,7 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
                 newPageRank + ";");
         context.write(keyOut, valueOut);
 
-        context.getCounter(Counter.RESIDUAL_COUNTER).increment((long) Math.abs(newPageRank - oldPageRank) * 1000000);
+        context.getCounter(Counter.RESIDUAL_COUNTER).increment((long) (Math.abs(newPageRank - oldPageRank) * 1000000));
 
         System.out.println("[ Reducer ] key: " + keyOut + "value: " + valueOut);
     }
