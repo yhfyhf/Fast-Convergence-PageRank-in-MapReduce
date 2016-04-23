@@ -1,6 +1,5 @@
+package BlockPageRank;
 import Conf.Conf;
-import GaussPageRank.PageRankMapper;
-import GaussPageRank.PageRankReducer;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;

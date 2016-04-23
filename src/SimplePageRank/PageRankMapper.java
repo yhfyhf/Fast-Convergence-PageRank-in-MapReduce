@@ -24,7 +24,10 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
     public void map(LongWritable keyIn, Text valueIn, Mapper.Context context)
             throws IOException, InterruptedException {
         System.out.println("!!valueIn: " + valueIn.toString());
-        String[] temp = valueIn.toString().split(";");
+        String[] temp = valueIn.toString().trim().split(";");
+
+        if (temp == null || temp.length < 2) { return; }
+
         String srcNodeId = temp[0].trim();
         String[] desNodeIds = temp[1].trim().split(",");
         float srcNodePageRank = Float.parseFloat(temp[2].trim());

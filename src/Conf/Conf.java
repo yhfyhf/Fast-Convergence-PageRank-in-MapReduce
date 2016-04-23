@@ -5,6 +5,7 @@ package Conf;
  */
 public class Conf {
     public static final String FILE_NAME = "simplepagerank_";
+    public static final String PATH = "/Users/Christina/DropBox/Courses/CS5300/projectself/pro2/";
 
     public static final int NODEINFO = 0;
     public static final int NEXTPAGERANK = 1;
@@ -20,6 +21,7 @@ public class Conf {
     public static final float RANDOM_JUMP_FACTOR = (1 - DAMPING_FACTOR) / NODES_NUM;
     public static final float RESIDUAL_ERROR = 0.001f;
     public static final float INBLOCK_ITERRATION = 5;
+
 
 
 

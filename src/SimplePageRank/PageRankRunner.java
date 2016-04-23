@@ -1,18 +1,20 @@
+package SimplePageRank;
+
 import Conf.Conf;
-import GaussPageRank.PageRankMapper;
-import GaussPageRank.PageRankReducer;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import java.io.IOException;
+
 /**
- * Created by Christina on 4/19/16.
+ * Created by Christina on 4/23/16.
  */
 public class PageRankRunner {
-
-    public static void main (String[] args) throws Exception {
+    public static void main(String[] args)
+            throws IOException, ClassNotFoundException, InterruptedException {
         String path = args[0] + "data/" + Conf.FILE_NAME;
 
         for (int i = 0; i < Conf.MAPREDUCE_ITERATION; i++) {
