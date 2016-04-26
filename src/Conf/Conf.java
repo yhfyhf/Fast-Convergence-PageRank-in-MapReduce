@@ -5,7 +5,8 @@ package Conf;
  */
 public class Conf {
     public static final String FILE_NAME = "simplepagerank_";
-    public static final String PATH = "/Users/Christina/DropBox/Courses/CS5300/projectself/pro2/";
+    // public static final String PATH = "/Users/Christina/DropBox/Courses/CS5300/projectself/pro2/";
+    public static final String PATH = "s3n://cs5300-project2-hy456/";
 
     public static final int NODEINFO = 0;
     public static final int NEXTPAGERANK = 1;

@@ -18,7 +18,8 @@ public class PageRankRunner {
     public static void main (String[] args) throws Exception {
         Logger log = LoggerConf.getInfoLogger();
 
-        String path = args[0] + "data/" + Conf.FILE_NAME;
+        // String path = args[0] + "data/" + Conf.FILE_NAME;
+        String path = Conf.PATH + "data/" + Conf.FILE_NAME;
 
         for (int i = 0; i < Conf.MAPREDUCE_ITERATION; i++) {
 
