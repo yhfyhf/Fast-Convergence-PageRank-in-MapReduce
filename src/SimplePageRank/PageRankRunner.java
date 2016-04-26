@@ -22,9 +22,6 @@ public class PageRankRunner {
         String outputPath = args[1];
 
         for (int i = 0; i < Conf.MAPREDUCE_ITERATION; i++) {
-
-            System.out.println("Iteration num: " + i);
-
             Job job = new Job();
             job.setJobName(Conf.FILE_NAME + (i + 1));
             job.setJarByClass(PageRankRunner.class);

@@ -34,19 +34,20 @@ def reformat(input_filepath, output_filepath):
     src_node_id dest_node_id random_floating_number
 
     The format of the output file is as follows: (tokens splitted by ';')
-    src_node_id;dest_node1,dest_node2,dest_node3;1
+    src_node_id;dest_node1,dest_node2,dest_node3;1/685230
     """
     with open(output_filepath, 'w') as output_f:
 
         prev_src_node_id = "-1"
         dest_node_ids = ""
+        init_pagerank = '{:.15f}'.format(1.0 / 685230)
 
         with open(input_filepath, 'r') as input_f:
             for line in input_f:
                 src_node_id, dest_node_id, random_num = line.split()
                 if prev_src_node_id != src_node_id:
                     if prev_src_node_id != "-1":
-                        output_f.write("{};{};{};\n".format(prev_src_node_id, dest_node_ids, 1))
+                        output_f.write("{};{};{};\n".format(prev_src_node_id, dest_node_ids, init_pagerank))
                     prev_src_node_id = src_node_id
                     dest_node_ids = dest_node_id
                 else:

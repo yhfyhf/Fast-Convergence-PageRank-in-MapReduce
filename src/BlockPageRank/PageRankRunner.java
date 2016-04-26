@@ -16,7 +16,6 @@ public class PageRankRunner {
         float residual = 0;
 
         for (int i = 0; i < Conf.MAPREDUCE_ITERATION; i++) {
-            System.out.println("Iteration num: " + i);
 
             Job job = new Job();
             job.setJobName(Conf.FILE_NAME + (i + 1));
