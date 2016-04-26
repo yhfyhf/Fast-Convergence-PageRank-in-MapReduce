@@ -29,8 +29,8 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
 
         String srcNodeId = keyIn.toString().trim();
         String desNodeIds = "";
-        float prevPageRank = 0;
-        float newPageRank = 0;
+        float prevPageRank = 0.00000f;
+        float newPageRank = 0.00000f;
 
         while (valuesIn.iterator().hasNext()) {
             Text valueIn = valuesIn.iterator().next();
@@ -45,11 +45,15 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
                     break;
             }
         }
+
+        newPageRank = Conf.DAMPING_FACTOR * newPageRank + Conf.RANDOM_JUMP_FACTOR;
         Text keyOut = new Text("");
         Text valueOut = new Text(srcNodeId + ";" + desNodeIds + ";" + newPageRank + ";");
         context.write(keyOut, valueOut);
 
-        context.getCounter(Counter.RESIDUAL_COUNTER).increment((long) (Math.abs(newPageRank - prevPageRank) * 1000000));
+        long temp = (long) (Math.abs(prevPageRank - newPageRank) * Conf.MULTIPLE / newPageRank );
+        log.info("valueOut: " + valueOut + ", temp = " + temp + ", " + prevPageRank + ", " + newPageRank);
+        context.getCounter(Counter.RESIDUAL_COUNTER).increment(temp);
 
         log.info("[ Reducer ] key: " + keyOut + "value: " + valueOut);
     }

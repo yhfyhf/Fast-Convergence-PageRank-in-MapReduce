@@ -16,12 +16,12 @@ import java.util.logging.Logger;
  */
 public class PageRankRunner {
     public static void main (String[] args) throws Exception {
-        Logger log = LoggerConf.getWarningLogger();
+        Logger log = LoggerConf.getInfoLogger();
 
         String path = args[0] + "data/" + Conf.FILE_NAME;
-        float residual = 0;
 
         for (int i = 0; i < Conf.MAPREDUCE_ITERATION; i++) {
+
             System.out.println("Iteration num: " + i);
 
             Job job = new Job();
@@ -38,11 +38,17 @@ public class PageRankRunner {
             FileOutputFormat.setOutputPath(job, new Path(outputPath));
 
             job.waitForCompletion(true);
-            float localResidual = job.getCounters().findCounter(SimplePageRank.Counter.RESIDUAL_COUNTER).getValue() / 1000000;
-            residual += localResidual;
-            System.out.println("[ Iteration " + i + " ]:" + localResidual);
+            float residual = job.getCounters().findCounter(SimplePageRank.Counter.RESIDUAL_COUNTER).getValue() / Conf.MULTIPLE;
+            float avgError = residual / Conf.NODES_NUM;
+
+            float threshold = Conf.EPSILON;
+            log.info("[ Iteration " + i + " ]: avg error = " + avgError + ", threshold = " + threshold);
+
+            if (avgError < threshold) {
+                break;
+            }
         }
-        System.out.println("Average residual:" + residual / Conf.NODES_NUM);
-        System.out.println("Map reduce done!");
+
+        log.severe("Map reduce done!");
     }
 }

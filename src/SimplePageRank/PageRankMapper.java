@@ -47,7 +47,7 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
         Text keyOut = new Text(srcNodeId);
         Text valueOut = new Text(Conf.NODEINFO + ";" + desNodeIdsStr + ";" + srcNodePageRank + ";");
         context.write(keyOut, valueOut);
-        log.fine("[ Mapper ] Emitted NODEINFO key: " + keyOut + ", value: " + valueOut);
+        log.info("[ Mapper ] Emitted NODEINFO key: " + keyOut + ", value: " + valueOut);
 
         // Emit the nextPageRank.
         for (String desNodeId : desNodeIds) {
@@ -56,7 +56,7 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
             }
             valueOut = new Text(Conf.NEXTPAGERANK +";" + nextPageRank);
             context.write(keyOut, valueOut);
-            log.fine("[ Mapper ] Emitted NEXTPAGERANK key: " + keyOut + ", value: " + valueOut);
+            log.info("[ Mapper ] Emitted NEXTPAGERANK key: " + keyOut + ", value: " + valueOut);
         }
     }
 }
