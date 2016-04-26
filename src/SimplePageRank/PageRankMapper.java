@@ -1,29 +1,35 @@
 package SimplePageRank;
 
 import Conf.Conf;
+import Conf.LoggerConf;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * Created by Christina on 4/18/16.
  */
 public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
+
+    private Logger log = LoggerConf.getWarningLogger();
+
     /**
      * keyIn:
      * valueIn: srcNodeId;desNodeId1,desNodeId2...;srcNodePageRank;
      *
-     * keyOut: desNodeId
-     * valueOut: NEXTPAGERANK;nextPageRank;
-     * Or
      * keyOut: srcNodeId
      * valueOut: NODEINFO;desNodeId1,desNodeId2...;srcOldNodePageRank;
+     *
+     * foreach desNode:
+     *     keyOut: desNodeId
+     *     valueOut: NEXTPAGERANK;nextPageRank;
      */
     public void map(LongWritable keyIn, Text valueIn, Mapper.Context context)
             throws IOException, InterruptedException {
-        System.out.println("!!valueIn: " + valueIn.toString());
+        log.info("[ Mapper ] valueIn: " + valueIn.toString());
         String[] tokens = valueIn.toString().trim().split(";");
 
         if (tokens.length < 2) {
@@ -31,31 +37,26 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
         }
 
         String srcNodeId = tokens[0].trim();
-        String[] desNodeIds = tokens[1].trim().split(",");
+        String desNodeIdsStr = tokens[1].trim();
+        String[] desNodeIds = desNodeIdsStr.split(",");
         int srcNodeDegree = desNodeIds.length;
         float srcNodePageRank = Float.parseFloat(tokens[2].trim());
         float nextPageRank = srcNodePageRank / srcNodeDegree;
 
-        // emit the srcNodeInfo
+        // Emit the srcNodeInfo.
         Text keyOut = new Text(srcNodeId);
-        Text valueOut = new Text(Conf.NODEINFO + ";" + tokens[1] + ";" + tokens[2] + ";");
+        Text valueOut = new Text(Conf.NODEINFO + ";" + desNodeIdsStr + ";" + srcNodePageRank + ";");
         context.write(keyOut, valueOut);
-        System.out.println("[ Mapper ] key: " + keyOut + ", value: " + valueOut);
+        log.fine("[ Mapper ] Emitted NODEINFO key: " + keyOut + ", value: " + valueOut);
 
-        // emit the nextPageRank
-        // check if it has desNode
-        // if not, emit srcNode and its pageRank
-        if (desNodeIds.length == 0 || desNodeIds[0].isEmpty()) {
-            valueOut = new Text(Conf.NEXTPAGERANK + ";" + nextPageRank);
-            context.write(keyOut, valueOut);
-            System.out.println("[ Mapper ] key: " + keyOut + ", value: " + valueOut);
-        } else {
-            for (String desNodeId : desNodeIds) {
+        // Emit the nextPageRank.
+        for (String desNodeId : desNodeIds) {
+            if (!desNodeId.isEmpty()) {
                 keyOut = new Text(desNodeId);
-                valueOut = new Text(Conf.NEXTPAGERANK +";" + nextPageRank);
-                context.write(keyOut, valueOut);
-                System.out.println("[ Mapper ] key: " + keyOut + ", value: " + valueOut);
             }
+            valueOut = new Text(Conf.NEXTPAGERANK +";" + nextPageRank);
+            context.write(keyOut, valueOut);
+            log.fine("[ Mapper ] Emitted NEXTPAGERANK key: " + keyOut + ", value: " + valueOut);
         }
     }
 }

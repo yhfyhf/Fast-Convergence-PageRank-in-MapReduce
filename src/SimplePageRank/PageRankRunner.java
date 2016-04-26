@@ -1,17 +1,23 @@
 package SimplePageRank;
 
 import Conf.Conf;
+import Conf.LoggerConf;
+
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import java.util.logging.Logger;
+
 /**
  * Created by Christina on 4/23/16.
  */
 public class PageRankRunner {
     public static void main (String[] args) throws Exception {
+        Logger log = LoggerConf.getWarningLogger();
+
         String path = args[0] + "data/" + Conf.FILE_NAME;
         float residual = 0;
 
@@ -34,9 +40,9 @@ public class PageRankRunner {
             job.waitForCompletion(true);
             float localResidual = job.getCounters().findCounter(SimplePageRank.Counter.RESIDUAL_COUNTER).getValue() / 1000000;
             residual += localResidual;
-            System.out.println("!!! iteration-" + i + ":" + localResidual);
+            System.out.println("[ Iteration " + i + " ]:" + localResidual);
         }
-        System.out.println("!!! average residual:" + residual / Conf.NODES_NUM);
+        System.out.println("Average residual:" + residual / Conf.NODES_NUM);
         System.out.println("Map reduce done!");
     }
 }
