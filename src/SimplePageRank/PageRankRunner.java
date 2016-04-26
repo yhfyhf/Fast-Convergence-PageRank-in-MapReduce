@@ -19,7 +19,8 @@ public class PageRankRunner {
         Logger log = LoggerConf.getInfoLogger();
 
         // String path = args[0] + "data/" + Conf.FILE_NAME;
-        String path = Conf.PATH + "data/" + Conf.FILE_NAME;
+        String inputPath = args[0];
+        String outputPath = args[1];
 
         for (int i = 0; i < Conf.MAPREDUCE_ITERATION; i++) {
 
@@ -33,10 +34,8 @@ public class PageRankRunner {
             job.setMapOutputKeyClass(Text.class);
             job.setMapOutputValueClass(Text.class);
 
-            String inputPath = path + i;
-            String outputPath = path + (i + 1);
-            FileInputFormat.addInputPath(job, new Path(inputPath));
-            FileOutputFormat.setOutputPath(job, new Path(outputPath));
+            FileInputFormat.addInputPath(job, new Path(inputPath + Conf.FILE_NAME + i));
+            FileOutputFormat.setOutputPath(job, new Path(outputPath + Conf.FILE_NAME + (i + 1)));
 
             job.waitForCompletion(true);
             float residual = job.getCounters().findCounter(SimplePageRank.Counter.RESIDUAL_COUNTER).getValue() / Conf.MULTIPLE;
