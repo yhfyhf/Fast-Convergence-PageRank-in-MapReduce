@@ -17,7 +17,7 @@ def reject_random_lines(input_filepath, output_filepath):
     """
     from_netid = 0.654                  # 456 is 654 reversed
     reject_min = 0.9 * from_netid
-    reject_min = 0.778
+    # reject_min = 0.778
     reject_limit = reject_min + 0.01
 
     with open(output_filepath, 'w') as output_f:

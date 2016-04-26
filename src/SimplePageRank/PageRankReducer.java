@@ -51,9 +51,9 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         Text valueOut = new Text(srcNodeId + ";" + desNodeIds + ";" + newPageRank + ";");
         context.write(keyOut, valueOut);
 
-        long temp = (long) (Math.abs(prevPageRank - newPageRank) * Conf.MULTIPLE / newPageRank );
-        context.getCounter(Counter.RESIDUAL_COUNTER).increment(temp);
-        log.info("valueOut: " + valueOut + ", temp = " + temp + ", " + prevPageRank + ", " + newPageRank);
+        long residual = (long) (Math.abs(prevPageRank - newPageRank) * Conf.MULTIPLE / newPageRank);
+        context.getCounter(Counter.RESIDUAL_COUNTER).increment(residual);
+        log.severe("valueOut: " + valueOut + ", residual = " + residual + ", prevPR = " + prevPageRank + ", newPR = " + newPageRank);
 
         log.info("[ Reducer ] key: " + keyOut + "value: " + valueOut);
     }
