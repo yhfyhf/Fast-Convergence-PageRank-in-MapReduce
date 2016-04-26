@@ -1,15 +1,15 @@
 def preprocess(input_filepath, filtered_filepath, output_filepath):
     """
     Preprocesses the input file.
-    Selects 1% lines into filtered_filepath, and reformats into output_filepath.
+    Selects 99% lines into filtered_filepath, and reformats into output_filepath.
     """
-    select_random_lines(input_filepath, filtered_filepath)
+    reject_random_lines(input_filepath, filtered_filepath)
     reformat(filtered_filepath, output_filepath)
 
 
-def select_random_lines(input_filepath, output_filepath):
+def reject_random_lines(input_filepath, output_filepath):
     """
-    Selects around 1% lines from the input file, filtered by the trailing
+    Rejects around 1% lines from the input file, filtered by the trailing
     random floating number in each lines.
 
     The lower bound and upper bound of the filter band are decided by a NetID.
@@ -17,11 +17,12 @@ def select_random_lines(input_filepath, output_filepath):
     """
     from_netid = 0.654                  # 456 is 654 reversed
     reject_min = 0.9 * from_netid
+    reject_min = 0.778
     reject_limit = reject_min + 0.01
 
     with open(output_filepath, 'w') as output_f:
         with open(input_filepath, 'r') as input_f:
-            map(output_f.write, filter(lambda line: reject_min <= float(line.split()[2]) < reject_limit, input_f))
+            map(output_f.write, filter(lambda line: float(line.split()[2]) < reject_min or float(line.split()[2]) >= reject_limit, input_f))
 
 
 def reformat(input_filepath, output_filepath):

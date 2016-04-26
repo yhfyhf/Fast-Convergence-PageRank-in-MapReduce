@@ -18,7 +18,6 @@ public class PageRankRunner {
     public static void main (String[] args) throws Exception {
         Logger log = LoggerConf.getInfoLogger();
 
-        // String path = args[0] + "data/" + Conf.FILE_NAME;
         String inputPath = args[0];
         String outputPath = args[1];
 
@@ -42,7 +41,7 @@ public class PageRankRunner {
             float avgError = residual / Conf.NODES_NUM;
 
             float threshold = Conf.EPSILON;
-            log.info("[ Iteration " + i + " ]: avg error = " + avgError + ", threshold = " + threshold);
+            System.out.println("[ Iteration " + i + " ]: average error = " + avgError);
 
             if (avgError < threshold) {
                 break;
