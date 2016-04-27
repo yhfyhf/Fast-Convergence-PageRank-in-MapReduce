@@ -38,10 +38,10 @@ public class Conf {
             616148, 626448, 636240, 646022, 655804, 665666, 675448, 685230 };
 
     public static String getBlockId(String nodeId) {
-//        int nodeIdInt = Integer.parseInt(nodeId);
-//        int blockId = (int) Math.floor(nodeIdInt / 10000);
-//        blockId = nodeIdInt < BLOCK_BOUNDARIES[blockId] ? blockId - 1 : blockId;
-//        return String.valueOf(blockId);
+        /*int nodeIdInt = Integer.parseInt(nodeId);
+        int blockId = (int) Math.floor(nodeIdInt / 10000);
+        blockId = nodeIdInt < BLOCK_BOUNDARIES[blockId] ? blockId - 1 : blockId;
+        return String.valueOf(blockId);*/
         int nodeIdInt = Integer.parseInt(nodeId);
 
         return String.valueOf(nodeIdInt % 2);
