@@ -5,6 +5,4 @@ package BlockPageRank;
  */
 public enum Counter {
     RESIDUAL_COUNTER,
-    LOWEST1_BLOCK_NODE,
-    LOWEST2_BLOCK_NODE
 }

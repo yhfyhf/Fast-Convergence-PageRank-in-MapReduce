@@ -78,4 +78,8 @@ public class Node {
         return degree;
     }
 
+    public String toString() {
+        return "nodeId:" + id;
+    }
+
 }

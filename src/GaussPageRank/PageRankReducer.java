@@ -4,11 +4,9 @@ import Conf.Conf;
 import Conf.LoggerConf;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.util.PriorityQueue;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -74,17 +72,19 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             System.out.println("!!!residual: " + residualErr);
         }
 
-        PriorityQueue<Node> heap = new PriorityQueue<Node>() {
+        Queue<Node> heap = new PriorityQueue<>(2, new Comparator<Node>() {
             @Override
-            protected boolean lessThan(Object o, Object o1) {
-                return ((Node) o).getNewPageRank() < ((Node) o1).getNewPageRank();
+            public int compare(Node o1, Node o2) {
+                return (int)(o1.getNewPageRank() - o2.getNewPageRank());
             }
-        };
+        });
 
         Text keyOut = new Text("");
         Text valueOut;
         for (int nodeId : nodesMap.keySet()) {
             Node node = nodesMap.get(nodeId);
+            heap.add(node);
+
             valueOut = new Text(nodeId + ";" + node.getDesNodeId() + ";" + node.getNewPageRank() + ";");
             context.write(keyOut, valueOut);
 
@@ -99,9 +99,10 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             System.out.println("[ PRReducer ] key: " + keyOut + "value: " + valueOut);
         }
 
-        //get two lowest pagerank nodes  blockId * Conf.MULTIPLE + NodeId
-        context.getCounter(Counter.LOWEST1_BLOCK_NODE).setValue(blockId * Conf.MULTIPLE + heap.pop().getId());
-        context.getCounter(Counter.LOWEST2_BLOCK_NODE).setValue(blockId * Conf.MULTIPLE + heap.pop().getId());
+        // TODO : it should be written into text
+        //get two lowest pagerank nodes
+        System.out.println("Lowest 1 node:  blockid:" + blockId + "  nodeid:" + heap.poll().getId());
+        System.out.println("Lowest 2 node:  blockid:" + blockId + "  nodeid:" + heap.poll().getId());
     }
 
     /**
