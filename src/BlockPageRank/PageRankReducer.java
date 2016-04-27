@@ -4,6 +4,7 @@ import Conf.Conf;
 import Conf.LoggerConf;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.util.PriorityQueue;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             throws IOException, InterruptedException {
         Map<Integer, Node> nodesMap = new HashMap<>();
         log.info("!!This reducer blockId: " + keyIn);
+        long blockId = Long.parseLong(keyIn.toString());
         while (valuesIn.iterator().hasNext()) {
             Text valueIn = valuesIn.iterator().next();
             log.info("!!keyIn: " + keyIn.toString() + " valueIn: " + valueIn.toString());
@@ -74,16 +76,34 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
 
         Text keyOut = new Text("");
         Text valueOut;
+
+        PriorityQueue<Node> heap = new PriorityQueue<Node>() {
+            @Override
+            protected boolean lessThan(Object o, Object o1) {
+                return ((Node) o).getNewPageRank() < ((Node) o1).getNewPageRank();
+            }
+        };
+
         for (int nodeId : nodesMap.keySet()) {
             Node node = nodesMap.get(nodeId);
+            heap.put(node);
             valueOut = new Text(nodeId + ";" + node.getDesNodeId() + ";" + node.getNewPageRank() + ";");
             context.write(keyOut, valueOut);
 
+            long residual = (long) (Math.abs(node.getOldPageRank() - node.getNewPageRank()) * Conf.MULTIPLE / node.getNewPageRank());
+            context.getCounter(Counter.RESIDUAL_COUNTER).increment(residual);
+            log.severe("valueOut: " + valueOut + ", residual = " + residual + ", prevPR = " + node.getOldPageRank() + ", newPR = " + node.getNewPageRank());
+            log.info("[ Reducer ] key: " + keyOut + "value: " + valueOut);
+
             context.getCounter(Counter.RESIDUAL_COUNTER).increment(
-                    (long) (Math.abs(node.getNewPageRank() - node.getOldPageRank()) * 1000000));
+                    (long) (Math.abs(node.getNewPageRank() - node.getOldPageRank()) * Conf.MULTIPLE));
 
             System.out.println("[ PRReducer ] key: " + keyOut + "value: " + valueOut);
         }
+
+        //get two lowest pagerank nodes  blockId * Conf.MULTIPLE + NodeId
+        context.getCounter(Counter.LOWEST1_BLOCK_NODE).setValue(blockId * Conf.MULTIPLE + heap.pop().getId());
+        context.getCounter(Counter.LOWEST2_BLOCK_NODE).setValue(blockId * Conf.MULTIPLE + heap.pop().getId());
     }
 
     /**

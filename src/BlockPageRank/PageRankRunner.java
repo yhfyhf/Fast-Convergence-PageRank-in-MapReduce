@@ -1,10 +1,14 @@
 package BlockPageRank;
+
 import Conf.Conf;
+import Conf.LoggerConf;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+import java.util.logging.Logger;
 
 /**
  * Created by Christina on 4/19/16.
@@ -12,11 +16,12 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class PageRankRunner {
 
     public static void main (String[] args) throws Exception {
-        String path = args[0] + "data/" + Conf.FILE_NAME;
-        float residual = 0;
+        Logger log = LoggerConf.getInfoLogger();
+
+        String inputPath = args[0];
+        String outputPath = args[1];
 
         for (int i = 0; i < Conf.MAPREDUCE_ITERATION; i++) {
-
             Job job = new Job();
             job.setJobName(Conf.FILE_NAME + (i + 1));
             job.setJarByClass(PageRankRunner.class);
@@ -25,17 +30,22 @@ public class PageRankRunner {
             job.setMapOutputKeyClass(Text.class);
             job.setMapOutputValueClass(Text.class);
 
-            String inputPath = path + i;
-            String outputPath = path + (i + 1);
-            FileInputFormat.addInputPath(job, new Path(inputPath));
-            FileOutputFormat.setOutputPath(job, new Path(outputPath));
+            FileInputFormat.addInputPath(job, new Path(inputPath + Conf.FILE_NAME + i));
+            FileOutputFormat.setOutputPath(job, new Path(outputPath + Conf.FILE_NAME + (i + 1)));
 
             job.waitForCompletion(true);
-            float localResidual = job.getCounters().findCounter(Counter.RESIDUAL_COUNTER).getValue() / 1000000;
-            residual += localResidual;
-            System.out.println("!!! iteration-" + i + ":" + localResidual);
+            float residual = ((float) job.getCounters().findCounter(Counter.RESIDUAL_COUNTER).getValue()) / Conf.MULTIPLE;
+            float avgError = residual / Conf.NODES_NUM;
+
+            float threshold = Conf.EPSILON;
+            System.out.println("[ Iteration " + i + " ]: average error = " + avgError);
+
+            if (avgError < threshold) {
+                break;
+            }
         }
-        System.out.println("!!! average residual:" + residual / Conf.NODES_NUM);
-        System.out.println("Map reduce done!");
+
+        log.severe("Map reduce done!");
     }
+
 }
