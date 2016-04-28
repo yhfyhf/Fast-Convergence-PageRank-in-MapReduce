@@ -48,7 +48,7 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
         context.write(keyOut, valueOut);
 
         // Emit the nextPageRank.
-        if (desNodeIds.length == 0 || desNodeIds[0].isEmpty()) {
+        if (desNodeIds[0].isEmpty()) {
             valueOut = new Text(Conf.NEXTPAGERANK +";" + srcNodePageRank);
             context.write(keyOut, valueOut);
         } else {
