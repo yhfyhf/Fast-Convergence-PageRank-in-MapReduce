@@ -29,8 +29,8 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
 
         String srcNodeId = keyIn.toString().trim();
         String desNodeIds = "";
-        double prevPageRank = 0.0f;
-        double newPageRank = 0.0f;
+        double prevPageRank = 0.0d;
+        double newPageRank = 0.0d;
 
         while (valuesIn.iterator().hasNext()) {
             Text valueIn = valuesIn.iterator().next();

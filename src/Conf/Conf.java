@@ -17,7 +17,7 @@ public class Conf {
 
     public static final int NODES_NUM = 685230;
     public static final int BLOCKS_NUM = 68;
-    public static final int MAPREDUCE_ITERATION = 1;
+    public static final int MAPREDUCE_ITERATION = 5;
     public static final float EPSILON = 0.001f;
 
     public static final float DAMPING_FACTOR = 0.85f; //0.85f
