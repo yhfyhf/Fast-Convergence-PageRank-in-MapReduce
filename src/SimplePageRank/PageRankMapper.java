@@ -39,9 +39,9 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
         String srcNodeId = tokens[0].trim();
         String desNodeIdsStr = tokens[1].trim();
         String[] desNodeIds = desNodeIdsStr.split(",");
-        int srcNodeDegree = desNodeIds.length;
+        int srcNodeDegree = desNodeIds[0].trim().equals("") ? 0 : desNodeIds.length;
         float srcNodePageRank = Float.parseFloat(tokens[2].trim());
-        float nextPageRank = srcNodePageRank / srcNodeDegree;
+        float nextPageRank = srcNodeDegree == 0 ? srcNodePageRank : srcNodePageRank / srcNodeDegree;
 
         // Emit the srcNodeInfo.
         Text keyOut = new Text(srcNodeId);
@@ -51,7 +51,7 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
 
         // Emit the nextPageRank.
         for (String desNodeId : desNodeIds) {
-            if (!desNodeId.isEmpty()) {
+            if (!desNodeId.equals("")) {
                 keyOut = new Text(desNodeId);
             }
             valueOut = new Text(Conf.NEXTPAGERANK +";" + nextPageRank);
