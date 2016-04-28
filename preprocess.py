@@ -60,5 +60,6 @@ def reformat(input_filepath, output_filepath):
 
 
 if __name__ == '__main__':
-    # reformat('./data/testcase1.txt', './data/simplepagerank_0')
-    preprocess('/Users/yhf/Documents/data/edges.txt', '/Users/yhf/Documents/data/filtered_edges.txt', '/Users/yhf/Documents/data/simplepagerank_0')
+    reformat('./data/edges.txt', './data/simplepagerank_0')
+    # preprocess('/Users/yhf/Documents/data/edges.txt', '/Users/yhf/Documents/data/filtered_edges.txt', '/Users/yhf/Documents/data/simplepagerank_0')
+    # preprocess('./data/edges.txt', './data/filtered_edges.txt', './data/simplepagerank_0')

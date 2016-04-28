@@ -6,7 +6,6 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.DoubleAccumulator;
 import java.util.logging.Logger;
 
 /**
@@ -30,8 +29,8 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
 
         String srcNodeId = keyIn.toString().trim();
         String desNodeIds = "";
-        double prevPageRank = 0.0;
-        double newPageRank = 0.0;
+        double prevPageRank = 0.0d;
+        double newPageRank = 0.0d;
 
         while (valuesIn.iterator().hasNext()) {
             Text valueIn = valuesIn.iterator().next();
@@ -53,9 +52,7 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         context.write(keyOut, valueOut);
 
         long residual = (long) (Math.abs(prevPageRank - newPageRank) * Conf.MULTIPLE / newPageRank);
-        context.getCounter(Counter.RESIDUAL_COUNTER).increment(residual);
-        log.info("valueOut: " + valueOut + ", residual = " + residual + ", prevPR = " + prevPageRank + ", newPR = " + newPageRank);
 
-        log.info("[ Reducer ] key: " + keyOut + "value: " + valueOut);
+        context.getCounter(Counter.RESIDUAL_COUNTER).increment(residual);
     }
 }
