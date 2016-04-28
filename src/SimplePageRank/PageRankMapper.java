@@ -29,7 +29,7 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
      */
     public void map(LongWritable keyIn, Text valueIn, Mapper.Context context)
             throws IOException, InterruptedException {
-        log.info("[ Mapper ] valueIn: " + valueIn.toString());
+//        log.info("[ Mapper ] valueIn: " + valueIn.toString());
         String[] tokens = valueIn.toString().trim().split(";");
 
         if (tokens.length < 2) {
@@ -47,16 +47,18 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
         Text keyOut = new Text(srcNodeId);
         Text valueOut = new Text(Conf.NODEINFO + ";" + desNodeIdsStr + ";" + srcNodePageRank + ";");
         context.write(keyOut, valueOut);
-        log.info("[ Mapper ] Emitted NODEINFO key: " + keyOut + ", value: " + valueOut);
+//        log.info("[ Mapper ] Emitted NODEINFO key: " + keyOut + ", value: " + valueOut);
 
         // Emit the nextPageRank.
-        for (String desNodeId : desNodeIds) {
-            if (!desNodeId.isEmpty()) {
-                keyOut = new Text(desNodeId);
-            }
-            valueOut = new Text(Conf.NEXTPAGERANK +";" + nextPageRank);
+        if (desNodeIds == null || desNodeIds.length == 0 || desNodeIds[0].isEmpty()) {
+            valueOut = new Text(Conf.NEXTPAGERANK +";" + srcNodePageRank);
             context.write(keyOut, valueOut);
-            log.info("[ Mapper ] Emitted NEXTPAGERANK key: " + keyOut + ", value: " + valueOut);
+        } else {
+            for (String desNodeId : desNodeIds) {
+                keyOut = new Text(desNodeId);
+                valueOut = new Text(Conf.NEXTPAGERANK +";" + nextPageRank);
+                context.write(keyOut, valueOut);
+            }
         }
     }
 }
