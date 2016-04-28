@@ -56,18 +56,18 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
 
         // Emit nextPageRank
         for (String desNodeId : desNodeIds) {
-            if (!desNodeId.isEmpty()) {
-                String desBlockId = getBlockId(desNodeId);
-                keyOut = new Text(desBlockId);
-                if (srcBlockId.equals(desBlockId)) {
-                    edgeInBlock += desNodeId + ",";
-                    valueOut = new Text(Conf.Conf.NEXTPAGERANK_FROM_INBLOCK +";" + desNodeId + ";" + nextPageRank + ";");
-                } else {
-                    valueOut = new Text(Conf.Conf.NEXTPAGERANK_FROM_OUTBLOCK +";" + desNodeId + ";" + nextPageRank + ";");
-                }
+            if (desNodeId.isEmpty()) {
+//                keyOut = new Text(srcBlockId);
+//                valueOut = new Text(Conf.Conf.NEXTPAGERANK_FROM_INBLOCK + ";" + srcNodeId + ";" + nextPageRank + ";");
+                break;
+            }
+            String desBlockId = getBlockId(desNodeId);
+            keyOut = new Text(desBlockId);
+            if (srcBlockId.equals(desBlockId)) {
+                edgeInBlock += desNodeId + ",";
+                valueOut = new Text(Conf.Conf.NEXTPAGERANK_FROM_INBLOCK +";" + desNodeId + ";" + nextPageRank + ";");
             } else {
-                keyOut = new Text(srcBlockId);
-                valueOut = new Text(Conf.Conf.NEXTPAGERANK_FROM_INBLOCK + ";" + srcNodeId + ";" + nextPageRank + ";");
+                valueOut = new Text(Conf.Conf.NEXTPAGERANK_FROM_OUTBLOCK +";" + desNodeId + ";" + nextPageRank + ";");
             }
             context.write(keyOut, valueOut);
             log.info("[ PRMapper ] key: " + keyOut + ", value: " + valueOut);

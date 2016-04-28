@@ -71,7 +71,6 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         float residualErr = Float.MAX_VALUE;
         while (iterNum++ < Conf.INBLOCK_ITERRATION && residualErr > Conf.RESIDUAL_ERROR) {
             residualErr = iterateBlockOnce(nodesMap);
-            System.out.println("!!!residual: " + residualErr);
         }
 
         Text keyOut = new Text("");
@@ -103,9 +102,9 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         }
 
         // TODO : it should be written into text
-        // get two lowest pagerank nodes
-        System.out.println("Lowest 1 node:  blockid:" + blockId + "  nodeid:" + heap.poll().getId());
-        System.out.println("Lowest 2 node:  blockid:" + blockId + "  nodeid:" + heap.poll().getId());
+        // get two lowest pagerank nodesSystem.
+//        System.out.println("Lowest 1 node:  blockid:" + blockId + "  nodeid:" + heap.poll().getId());
+//        System.out.println("Lowest 2 node:  blockid:" + blockId + "  nodeid:" + heap.poll().getId());
 
     }
 
