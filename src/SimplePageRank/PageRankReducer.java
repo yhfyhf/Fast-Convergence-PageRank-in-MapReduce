@@ -54,7 +54,5 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         long residual = (long) (Math.abs(prevPageRank - newPageRank) * Conf.MULTIPLE / newPageRank);
 
         context.getCounter(Counter.RESIDUAL_COUNTER).increment(residual);
-//        System.out.println("valueOut: " + srcNodeId + ", residual = " + residual + ", prevPR = " + prevPageRank + ", newPR = " + newPageRank);
-//        log.info("[ Reducer ] key: " + keyOut + "value: " + valueOut);
     }
 }

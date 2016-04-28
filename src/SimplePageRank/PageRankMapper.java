@@ -29,7 +29,6 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
      */
     public void map(LongWritable keyIn, Text valueIn, Mapper.Context context)
             throws IOException, InterruptedException {
-//        log.info("[ Mapper ] valueIn: " + valueIn.toString());
         String[] tokens = valueIn.toString().trim().split(";");
 
         if (tokens.length < 2) {
@@ -40,17 +39,16 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
         String desNodeIdsStr = tokens[1].trim();
         String[] desNodeIds = desNodeIdsStr.split(",");
         int srcNodeDegree = desNodeIds.length;
-        float srcNodePageRank = Float.parseFloat(tokens[2].trim());
-        float nextPageRank = srcNodePageRank / srcNodeDegree;
+        Double srcNodePageRank = Double.parseDouble(tokens[2].trim());
+        Double nextPageRank = srcNodePageRank / srcNodeDegree;
 
         // Emit the srcNodeInfo.
         Text keyOut = new Text(srcNodeId);
         Text valueOut = new Text(Conf.NODEINFO + ";" + desNodeIdsStr + ";" + srcNodePageRank + ";");
         context.write(keyOut, valueOut);
-//        log.info("[ Mapper ] Emitted NODEINFO key: " + keyOut + ", value: " + valueOut);
 
         // Emit the nextPageRank.
-        if (desNodeIds == null || desNodeIds.length == 0 || desNodeIds[0].isEmpty()) {
+        if (desNodeIds.length == 0 || desNodeIds[0].isEmpty()) {
             valueOut = new Text(Conf.NEXTPAGERANK +";" + srcNodePageRank);
             context.write(keyOut, valueOut);
         } else {
