@@ -38,7 +38,7 @@ public class PageRankRunner {
             float avgError = residual / Conf.NODES_NUM;
 
             float threshold = Conf.EPSILON;
-            System.out.println("[ Iteration " + i + " ]: average error = " + avgError);
+            System.out.println("Iteration " + i + " avg error " + String.format("%.6e", avgError));
 
             if (avgError < threshold) {
                 break;

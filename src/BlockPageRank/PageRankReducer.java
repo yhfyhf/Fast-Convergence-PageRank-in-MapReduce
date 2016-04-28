@@ -42,7 +42,9 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             log.info("!!keyIn: " + keyIn.toString() + " valueIn: " + valueIn.toString());
             String[] tokens = valueIn.toString().split(";");
             int nodeId = Integer.parseInt(tokens[1].trim());
-            nodesMap.putIfAbsent(nodeId, new Node(nodeId));
+            if (!nodesMap.containsKey(nodeId)) {
+                nodesMap.put(nodeId, new Node(nodeId));
+            }
             Node node = nodesMap.get(nodeId);
             switch (Integer.parseInt(tokens[0])) {
                 case Conf.NODEINFO:
@@ -91,17 +93,17 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
 
             long residual = (long) (Math.abs(node.getOldPageRank() - node.getNewPageRank()) * Conf.MULTIPLE / node.getNewPageRank());
             context.getCounter(Counter.RESIDUAL_COUNTER).increment(residual);
-            log.severe("valueOut: " + valueOut + ", residual = " + residual + ", prevPR = " + node.getOldPageRank() + ", newPR = " + node.getNewPageRank());
+            log.info("valueOut: " + valueOut + ", residual = " + residual + ", prevPR = " + node.getOldPageRank() + ", newPR = " + node.getNewPageRank());
             log.info("[ Reducer ] key: " + keyOut + "value: " + valueOut);
 
             context.getCounter(Counter.RESIDUAL_COUNTER).increment(
                     (long) (Math.abs(node.getNewPageRank() - node.getOldPageRank()) * Conf.MULTIPLE));
 
-            System.out.println("[ PRReducer ] key: " + keyOut + "value: " + valueOut);
+            log.info("[ PRReducer ] key: " + keyOut + "value: " + valueOut);
         }
 
         // TODO : it should be written into text
-        //get two lowest pagerank nodes
+        // get two lowest pagerank nodes
         System.out.println("Lowest 1 node:  blockid:" + blockId + "  nodeid:" + heap.poll().getId());
         System.out.println("Lowest 2 node:  blockid:" + blockId + "  nodeid:" + heap.poll().getId());
 

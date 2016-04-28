@@ -1,9 +1,16 @@
-mkdir -p out/SimplePageRankOut
+bucket_name=cs5300-project2-hy456
+
+if [ "$1" != "SimplePageRank" ] && [ "$1" != "BlockPageRank" ] ; then
+	echo "Incorrect argument."
+	exit 1
+fi
+
+mkdir -p "out/$1Out"
 cd src
 
-javac -classpath /usr/local/Cellar/hadoop/2.7.2/libexec/share/hadoop/common/*:/usr/local/Cellar/hadoop/2.7.2/libexec/share/hadoop/yarn/lib/*:/usr/local/Cellar/hadoop/2.7.2/libexec/share/hadoop/mapreduce/lib/*:/usr/local/Cellar/hadoop/2.7.2/libexec/share/hadoop/mapreduce/*:./  -d ../out/SimplePageRankOut/ SimplePageRank/*.java
+javac -classpath /usr/local/Cellar/hadoop/2.7.2/libexec/share/hadoop/common/*:/usr/local/Cellar/hadoop/2.7.2/libexec/share/hadoop/yarn/lib/*:/usr/local/Cellar/hadoop/2.7.2/libexec/share/hadoop/mapreduce/lib/*:/usr/local/Cellar/hadoop/2.7.2/libexec/share/hadoop/mapreduce/*:./  -d "../out/$1Out/" $1/*.java
 
-cd ../out/SimplePageRankOut
-jar -cvf SimplePageRank.jar -C SimplePageRank/ Conf/ .
-aws s3 cp SimplePageRank.jar s3://cs5300-project2-hy456/
-aws emr add-steps --cluster-id j-3A6FQY94CDG0L --steps Type=CUSTOM_JAR,Name=SimplePageRank,ActionOnFailure=CONTINUE,Jar=s3://cs5300-project2-hy456/SimplePageRank.jar,MainClass=SimplePageRank.PageRankRunner,Args=s3n://cs5300-project2-hy456/data/,s3n://cs5300-project2-hy456/data/
+cd ../out/$1Out
+jar -cvf $1.jar -C $1 Conf/ .
+aws s3 cp $1.jar s3://$bucket_name/
+aws emr add-steps --cluster-id j-2YB33174GYBPX --steps Type=CUSTOM_JAR,Name=$1,ActionOnFailure=CONTINUE,Jar=s3://$bucket_name/$1.jar,MainClass=$1.PageRankRunner,Args=s3n://$bucket_name/data/,s3n://$bucket_name/data/
