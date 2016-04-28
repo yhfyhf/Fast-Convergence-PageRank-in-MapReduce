@@ -15,7 +15,7 @@ public class Conf {
     public static final int NEXTPAGERANK_FROM_OUTBLOCK = 5;
 
 
-    public static final int NODES_NUM = 5;//685230;
+    public static final int NODES_NUM = 685230;
     public static final int BLOCKS_NUM = 68;
     public static final int MAPREDUCE_ITERATION = 5;
     public static final float EPSILON = 0.001f;

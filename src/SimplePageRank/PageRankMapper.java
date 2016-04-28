@@ -50,7 +50,7 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
         // Emit the nextPageRank.
         for (String desNodeId : desNodeIds) {
             if (desNodeId.isEmpty()) {
-                return;
+                break;
             }
             keyOut = new Text(desNodeId);
             valueOut = new Text(Conf.NEXTPAGERANK +";" + nextPageRank);

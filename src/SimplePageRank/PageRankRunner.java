@@ -34,13 +34,14 @@ public class PageRankRunner {
             FileOutputFormat.setOutputPath(job, new Path(outputPath + Conf.FILE_NAME + (i + 1)));
 
             job.waitForCompletion(true);
-            job.getCounters().findCounter(SimplePageRank.Counter.RESIDUAL_COUNTER).setValue(0l);
-            float residual = ((float) job.getCounters().findCounter(SimplePageRank.Counter.RESIDUAL_COUNTER).getValue()) / Conf.MULTIPLE;
-            float avgError = residual / Conf.NODES_NUM;
+//            job.getCounters().findCounter(SimplePageRank.Counter.RESIDUAL_COUNTER).setValue(0l);
+            double residual = ((double) job.getCounters().findCounter(SimplePageRank.Counter.RESIDUAL_COUNTER).getValue()) / Conf.MULTIPLE;
+            double avgError = residual / Conf.NODES_NUM;
 
-            float threshold = Conf.EPSILON;
+            double threshold = Conf.EPSILON;
             System.out.println("Iteration " + i + " avg error " + String.format("%.6e", avgError));
 
+            break;
             /*if (avgError < threshold) {
                 break;
             }*/
