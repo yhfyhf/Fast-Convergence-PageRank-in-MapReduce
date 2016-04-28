@@ -18,10 +18,10 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
 
     /**
      * keyIn:
-     * valueIn: srcNodeId;desNodeId1,desNodeId2...;srcNodePageRank;
+     * valueIn: srcNodeId;desNodeId1,desNodeId2…;srcNodePageRank;
      *
      * keyOut: srcNodeId
-     * valueOut: NODEINFO;desNodeId1,desNodeId2...;srcOldNodePageRank;
+     * valueOut: NODEINFO;desNodeId1,desNodeId2…;srcOldNodePageRank;
      *
      * foreach desNode:
      *     keyOut: desNodeId
@@ -38,9 +38,9 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
         String srcNodeId = tokens[0].trim();
         String desNodeIdsStr = tokens[1].trim();
         String[] desNodeIds = desNodeIdsStr.split(",");
-        int srcNodeDegree = desNodeIds.length;
+        int srcNodeDegree = desNodeIds[0].trim().equals("") ? 0 : desNodeIds.length;
         Double srcNodePageRank = Double.parseDouble(tokens[2].trim());
-        Double nextPageRank = srcNodePageRank / srcNodeDegree;
+        Double nextPageRank = srcNodeDegree == 0 ? 0.0 : srcNodePageRank / srcNodeDegree;
 
         // Emit the srcNodeInfo.
         Text keyOut = new Text(srcNodeId);
@@ -48,15 +48,14 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
         context.write(keyOut, valueOut);
 
         // Emit the nextPageRank.
-        if (desNodeIds[0].isEmpty()) {
-            valueOut = new Text(Conf.NEXTPAGERANK +";" + srcNodePageRank);
-            context.write(keyOut, valueOut);
-        } else {
-            for (String desNodeId : desNodeIds) {
-                keyOut = new Text(desNodeId);
-                valueOut = new Text(Conf.NEXTPAGERANK +";" + nextPageRank);
-                context.write(keyOut, valueOut);
+        for (String desNodeId : desNodeIds) {
+            if (desNodeId.isEmpty()) {
+                return;
             }
+            keyOut = new Text(desNodeId);
+            valueOut = new Text(Conf.NEXTPAGERANK +";" + nextPageRank);
+            context.write(keyOut, valueOut);
+            log.info("[ Mapper ] Emitted NEXTPAGERANK key: " + keyOut + ", value: " + valueOut);
         }
     }
 }

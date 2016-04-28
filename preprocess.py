@@ -15,7 +15,7 @@ def reject_random_lines(input_filepath, output_filepath):
     The lower bound and upper bound of the filter band are decided by a NetID.
     The NetID selected in this case is hy456.
     """
-    # from_netid = 0.654                  # 456 is 654 reversed
+    from_netid = 0.654                  # 456 is 654 reversed
     from_netid = 0.887
     reject_min = 0.9 * from_netid
     # reject_min = 0.778
@@ -49,6 +49,8 @@ def reformat(input_filepath, output_filepath):
                 if prev_src_node_id != src_node_id:
                     if prev_src_node_id != "-1":
                         output_f.write("{};{};{};\n".format(prev_src_node_id, dest_node_ids, init_pagerank))
+                    for node_id in xrange(int(prev_src_node_id)+1, int(src_node_id)):   # isolation nodes
+                        output_f.write("{};{};{};\n".format(node_id, "", init_pagerank))
                     prev_src_node_id = src_node_id
                     dest_node_ids = dest_node_id
                 else:

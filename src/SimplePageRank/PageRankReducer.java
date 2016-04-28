@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  */
 public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
 
-    private Logger log = LoggerConf.getWarningLogger();
+    private Logger log = LoggerConf.getInfoLogger();
 
     /**
      * keyIn: srcNodeId
@@ -54,5 +54,7 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         long residual = (long) (Math.abs(prevPageRank - newPageRank) * Conf.MULTIPLE / newPageRank);
 
         context.getCounter(Counter.RESIDUAL_COUNTER).increment(residual);
+
+        log.info("[ Reducer ] srcNodeId:" + srcNodeId + " residual:" + residual + " pagerank:" + newPageRank);
     }
 }

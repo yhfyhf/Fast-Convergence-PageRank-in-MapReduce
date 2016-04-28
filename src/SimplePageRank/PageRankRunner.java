@@ -41,9 +41,9 @@ public class PageRankRunner {
             float threshold = Conf.EPSILON;
             System.out.println("Iteration " + i + " avg error " + String.format("%.6e", avgError));
 
-            if (avgError < threshold) {
+            /*if (avgError < threshold) {
                 break;
-            }
+            }*/
         }
 
         log.severe("Map reduce done!");
