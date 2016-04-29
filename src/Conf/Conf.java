@@ -5,8 +5,6 @@ package Conf;
  */
 public class Conf {
     public static final String FILE_NAME = "simplepagerank_";
-    // public static final String PATH = "/Users/Christina/DropBox/Courses/CS5300/projectself/pro2/";
-    public static final String PATH = "s3n://cs5300-project2-hy456/data/";
 
     public static final int NODEINFO = 0;
     public static final int NEXTPAGERANK = 1;
@@ -20,7 +18,7 @@ public class Conf {
     public static final int MAPREDUCE_ITERATION = 8;
     public static final float EPSILON = 0.001f;
 
-    public static final float DAMPING_FACTOR = 0.85f; //0.85f
+    public static final float DAMPING_FACTOR = 0.85f;
     public static final float RANDOM_JUMP_FACTOR = ((1 - DAMPING_FACTOR) / NODES_NUM);
     public static final int MULTIPLE = 1000000;
     public static final float RESIDUAL_ERROR = 0.001f;
@@ -47,6 +45,4 @@ public class Conf {
     public static String getBlockIdRandom(String nodeId) {
         return String.valueOf(nodeId.hashCode() % BLOCKS_NUM);
     }
-
-
 }

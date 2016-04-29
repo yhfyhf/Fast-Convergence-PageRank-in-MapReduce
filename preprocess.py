@@ -1,3 +1,8 @@
+"""
+Usage: You need to specify the input filepath and out filepath in the main method.
+"""
+
+
 def preprocess(input_filepath, filtered_filepath, output_filepath):
     """
     Preprocesses the input file.
@@ -16,9 +21,7 @@ def reject_random_lines(input_filepath, output_filepath):
     The NetID selected in this case is hy456.
     """
     from_netid = 0.654                  # 456 is 654 reversed
-    from_netid = 0.887
     reject_min = 0.9 * from_netid
-    # reject_min = 0.778
     reject_limit = reject_min + 0.01
 
     with open(output_filepath, 'w') as output_f:
@@ -63,5 +66,5 @@ def reformat(input_filepath, output_filepath):
 
 if __name__ == '__main__':
     # reformat('./data/edges.txt', './data/simplepagerank_0')
-    # preprocess('/Users/yhf/Documents/data/edges.txt', '/Users/yhf/Documents/data/filtered_edges.txt', '/Users/yhf/Documents/data/simplepagerank_0')
-    preprocess('./data/edges.txt', './data/filtered_edges.txt', './data/simplepagerank_0')
+    preprocess('/Users/yhf/Documents/data/edges.txt', '/Users/yhf/Documents/data/filtered_edges.txt', '/Users/yhf/Documents/data/simplepagerank_0')
+    # preprocess('./data/edges.txt', './data/filtered_edges.txt', './data/simplepagerank_0')

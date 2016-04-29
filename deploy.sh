@@ -1,6 +1,7 @@
 bucket_name=cs5300-project2-hy456
+cluster_id=j-1ARBGJ15MPL9G
 
-if [ "$1" != "SimplePageRank" ] && [ "$1" != "BlockPageRank" ] ; then
+if [ "$1" != "SimplePageRank" ] && [ "$1" != "BlockPageRank" ] && [ "$1" != "GaussPageRank" ]; then
 	echo "Incorrect argument."
 	exit 1
 fi
@@ -13,4 +14,4 @@ javac -classpath /usr/local/Cellar/hadoop/2.7.2/libexec/share/hadoop/common/*:/u
 cd ../out/$1Out
 jar -cvf $1.jar -C $1 Conf/ .
 aws s3 cp $1.jar s3://$bucket_name/
-aws emr add-steps --cluster-id j-2YB33174GYBPX --steps Type=CUSTOM_JAR,Name=$1,ActionOnFailure=CONTINUE,Jar=s3://$bucket_name/$1.jar,MainClass=$1.PageRankRunner,Args=s3n://$bucket_name/data/,s3n://$bucket_name/data/
+aws emr add-steps --cluster-id $cluster_id --steps Type=CUSTOM_JAR,Name=$1,ActionOnFailure=CONTINUE,Jar=s3://$bucket_name/$1.jar,MainClass=$1.PageRankRunner,Args=s3n://$bucket_name/data/,s3n://$bucket_name/data/

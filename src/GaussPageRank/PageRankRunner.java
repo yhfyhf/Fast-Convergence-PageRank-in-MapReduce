@@ -37,11 +37,11 @@ public class PageRankRunner {
             float residual = ((float) job.getCounters().findCounter(Counter.RESIDUAL_COUNTER).getValue()) / Conf.MULTIPLE;
             float avgError = residual / Conf.NODES_NUM;
 
-            float threshold = Conf.EPSILON;
             System.out.println("Iteration " + i + " avg error " + String.format("%.6e", avgError));
             System.out.println("Iteration " + i + " inblock iter " +
-                    job.getCounters().findCounter(Counter.INBLOCK_INTER_COUNTER).getValue() * 1.0 / Conf.BLOCKS_NUM);
+                    Math.round(job.getCounters().findCounter(Counter.INBLOCK_INTER_COUNTER).getValue() * 1.0 / Conf.BLOCKS_NUM));
 
+            float threshold = Conf.EPSILON;
             if (avgError < threshold) {
                 break;
             }
