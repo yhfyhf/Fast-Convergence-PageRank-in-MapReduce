@@ -20,7 +20,7 @@ def reject_random_lines(input_filepath, output_filepath):
     The lower bound and upper bound of the filter band are decided by a NetID.
     The NetID selected in this case is hy456.
     """
-    from_netid = 0.654                  # 456 is 654 reversed
+    from_netid = 0.456                  # 456 is 654 reversed
     reject_min = 0.9 * from_netid
     reject_limit = reject_min + 0.01
 
@@ -66,5 +66,5 @@ def reformat(input_filepath, output_filepath):
 
 if __name__ == '__main__':
     # reformat('./data/edges.txt', './data/simplepagerank_0')
-    preprocess('/Users/yhf/Documents/data/edges.txt', '/Users/yhf/Documents/data/filtered_edges.txt', '/Users/yhf/Documents/data/simplepagerank_0')
-    # preprocess('./data/edges.txt', './data/filtered_edges.txt', './data/simplepagerank_0')
+    # preprocess('/Users/yhf/Documents/data/edges.txt', '/Users/yhf/Documents/data/filtered_edges.txt', '/Users/yhf/Documents/data/simplepagerank_0')
+    preprocess('./data/edges.txt', './data/filtered_edges.txt', './data/simplepagerank_0')

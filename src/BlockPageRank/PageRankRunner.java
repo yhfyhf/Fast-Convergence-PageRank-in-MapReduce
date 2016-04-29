@@ -45,6 +45,7 @@ public class PageRankRunner {
             if (avgError < threshold) {
                 break;
             }
+            break;
         }
 
         log.severe("Map reduce done!");

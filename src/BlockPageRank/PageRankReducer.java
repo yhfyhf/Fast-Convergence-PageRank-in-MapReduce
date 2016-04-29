@@ -76,16 +76,29 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         int iterNum = 0;
         float residualErr = Float.MAX_VALUE;
         while (iterNum++ < Conf.INBLOCK_ITERRATION && residualErr > Conf.RESIDUAL_ERROR) {
+
+//            if (nodesMap.containsKey(0)) {
+//                Node temp = nodesMap.get(0);
+//                System.out.println("!! nodeId: 0, pr:" + temp.getNewPageRank());
+//            }
+
+
+
+
             context.getCounter(Counter.INBLOCK_INTER_COUNTER).increment(1);
             residualErr = iterateBlockOnce(nodesMap);
 
-//            System.out.println("blockId: " + keyIn + ", iterNum: " + iterNum + ", residual: " + residualErr);
+//            if (keyIn.toString().equals("1")) {
+//                System.out.println("iter: " + iterNum + ", residual:" + residualErr);
+//            }
+
+
         }
 
         Text keyOut = new Text("");
         Text valueOut;
 
-        Queue<Node> heap = new PriorityQueue<>(2, new Comparator<Node>() {
+        Queue<Node> heap = new PriorityQueue<>(new Comparator<Node>() {
             @Override
             public int compare(Node o1, Node o2) {
                 return (int)(o1.getNewPageRank() - o2.getNewPageRank());
@@ -105,6 +118,9 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             log.info("valueOut: " + valueOut + ", residual = " + residual + ", prevPR = " + node.getOldPageRank() + ", newPR = " + node.getNewPageRank());
             log.info("[ Reducer ] key: " + keyOut + "value: " + valueOut);
             residualErr += residual;
+
+            node = heap.peek();
+//            System.out.println("!! BolckId" + blockId + ", Iter:" + iterNum + ", nodeId:" + node.getId() + ", pagerank:" + node.getNewPageRank());
 
         }
 
@@ -133,6 +149,12 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             node.setNewPageRank(node.getPageRankFromOutBlock());
         }
 
+//        if (nodesMap.containsKey(0)) {
+//            System.out.println("!!out:" + nodesMap.get(0).getNewPageRank());
+//        }
+
+
+
         //get the updated newPageRank considering the nextPageRank from inBlock nodes
         for (Node srcNode : nodesMap.values()) {
             //check if the node has desNodeInBlock
@@ -150,6 +172,11 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             }
         }
 
+//        if (nodesMap.containsKey(0)) {
+//            System.out.println("!!out + in:" + nodesMap.get(0).getNewPageRank());
+//        }
+
+
         // update newPageRank considering the damping factor and calculate the residual
         for (Node node : nodesMap.values()) {
             float updatedPageRank = node.getNewPageRank() * Conf.DAMPING_FACTOR + Conf.RANDOM_JUMP_FACTOR;
@@ -157,12 +184,9 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             float startPageRank = startPageRankMap.get(node.getId());
             float endPageRank = node.getNewPageRank();
             residuals += Math.abs(startPageRank - endPageRank) / endPageRank;
-
-//            if (node.getId() > 10350 && node.getId() < 10360) {
-//                System.out.println("!!nodeId:" + node.getId() + " before:" + startPageRank + " after:" + endPageRank + " residual:" + (Math.abs(startPageRank - endPageRank) / endPageRank));
-//            }
-
         }
+
+
 
         // return the avg of residuals
         return residuals / nodesMap.size();

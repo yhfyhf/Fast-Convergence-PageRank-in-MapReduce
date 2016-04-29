@@ -66,6 +66,12 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
                 valueOut = new Text(Conf.Conf.NEXTPAGERANK_FROM_INBLOCK +";" + desNodeId + ";" + nextPageRank + ";");
             } else {
                 valueOut = new Text(Conf.Conf.NEXTPAGERANK_FROM_OUTBLOCK +";" + desNodeId + ";" + nextPageRank + ";");
+
+                if (desNodeId.equals("0")) {
+                    System.out.println("!! from:" + srcNodeId + ", pr:" + nextPageRank);
+                }
+
+
             }
             context.write(keyOut, valueOut);
 //            log.info("[ PRMapper ] key: " + keyOut + ", value: " + valueOut);
