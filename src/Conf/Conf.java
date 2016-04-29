@@ -24,7 +24,7 @@ public class Conf {
     public static final float RANDOM_JUMP_FACTOR = ((1 - DAMPING_FACTOR) / NODES_NUM);
     public static final int MULTIPLE = 1000000;
     public static final float RESIDUAL_ERROR = 0.001f;
-    public static final float INBLOCK_ITERRATION = 100;
+    public static final float INBLOCK_ITERRATION = 30;
 
 
     private static final int[] BLOCK_BOUNDARIES = { 0, 10328, 20373, 30629, 40645,
@@ -42,14 +42,10 @@ public class Conf {
         int blockId = (int) Math.floor(nodeIdInt / 10000);
         blockId = nodeIdInt < BLOCK_BOUNDARIES[blockId] ? blockId - 1 : blockId;
         return String.valueOf(blockId);
-
-//        int nodeIdInt = Integer.parseInt(nodeId);
-//        return String.valueOf(nodeIdInt % 2);
     }
 
     public static String getBlockIdRandom(String nodeId) {
-//        return String.valueOf(nodeId.hashCode() % BLOCKS_NUM);
-        return "1";
+        return String.valueOf(nodeId.hashCode() % BLOCKS_NUM);
     }
 
 
