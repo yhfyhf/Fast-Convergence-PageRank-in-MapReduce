@@ -22,7 +22,7 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
      * valueIn: NODEINFO;desNodeId1,desNodeId2...;srcNodePageRank;
      *
      * keyOut:
-     * valueIn: srcNodeId;desNodeId1,desNodeId2...;srcNodeDegree;srcNodePageRank;
+     * valueOut: srcNodeId;desNodeId1,desNodeId2...;srcNodeDegree;srcNodePageRank;
      * */
     protected void reduce(Text keyIn, Iterable<Text> valuesIn, Context context)
             throws IOException, InterruptedException {

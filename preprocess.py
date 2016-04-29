@@ -1,5 +1,11 @@
 """
-Usage: You need to specify the input filepath and out filepath in the main method.
+Filter out 1% edges, and preprocess the file.
+
+Usage: You need to specify these arguments in the main method:
+
+    @input filepath
+    @intermediate filepath of filtered edges
+    @output filepath
 """
 
 
