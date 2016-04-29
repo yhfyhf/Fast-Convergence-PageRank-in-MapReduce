@@ -5,6 +5,5 @@ out/
 data/
 *.class
 *.jar
-*PageRank/
 Conf/
 preprocess1.py
