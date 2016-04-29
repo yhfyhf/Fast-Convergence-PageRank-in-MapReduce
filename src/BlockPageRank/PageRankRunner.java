@@ -39,6 +39,8 @@ public class PageRankRunner {
 
             float threshold = Conf.EPSILON;
             System.out.println("Iteration " + i + " avg error " + String.format("%.6e", avgError));
+            System.out.println("Iteration " + i + " inblock iter " +
+                    job.getCounters().findCounter(Counter.INBLOCK_INTER_COUNTER).getValue() * 1.0 / Conf.BLOCKS_NUM);
 
             if (avgError < threshold) {
                 break;

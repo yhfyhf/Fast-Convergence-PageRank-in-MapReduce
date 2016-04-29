@@ -67,9 +67,15 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             }
         }
 
+        for (Node node : nodesMap.values()) {
+            node.setNewPageRank(node.getNewPageRank() * Conf.DAMPING_FACTOR + Conf.RANDOM_JUMP_FACTOR);
+        }
+
+
         int iterNum = 0;
         float residualErr = Float.MAX_VALUE;
         while (iterNum++ < Conf.INBLOCK_ITERRATION && residualErr > Conf.RESIDUAL_ERROR) {
+            context.getCounter(Counter.INBLOCK_INTER_COUNTER).increment(1);
             residualErr = iterateBlockOnce(nodesMap);
         }
 
@@ -120,12 +126,8 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         //set nextPageRank and newPageRank for each node
         for (Node node : nodesMap.values()) {
             startPageRankMap.put(node.getId(), node.getNewPageRank());
-
-            //check if the node has desNode
-            if (!node.getDesNodeId().isEmpty()) {
-                node.setNextPageRank(node.getNewPageRank() / node.getDegree());
-                node.setNewPageRank(node.getPageRankFromOutBlock());
-            }
+            node.setNextPageRank(node.getNewPageRank() / node.getDegree());
+            node.setNewPageRank(node.getPageRankFromOutBlock());
         }
 
         //get the updated newPageRank considering the nextPageRank from inBlock nodes
@@ -134,6 +136,7 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             if (srcNode.getDesNodeInBlock().isEmpty()) {
                 continue;
             }
+
             String[] desNodeIds = srcNode.getDesNodeInBlock().split(",");
             float nextPageRank = srcNode.getNextPageRank();
 

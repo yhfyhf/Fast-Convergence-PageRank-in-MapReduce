@@ -5,4 +5,5 @@ package BlockPageRank;
  */
 public enum Counter {
     RESIDUAL_COUNTER,
+    INBLOCK_INTER_COUNTER
 }
