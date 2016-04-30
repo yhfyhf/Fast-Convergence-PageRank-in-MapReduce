@@ -5,8 +5,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Christina on 4/30/16.
@@ -58,11 +57,22 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         int iterNum = 0;
         float residual = Float.MAX_VALUE;
         while (iterNum < Conf.INBLOCK_ITERRATION && residual > Conf.RESIDUAL_ERROR) {
+            iterNum++;
             residual = iterateBlockOnce(nodesMap);
             context.getCounter(Counter.INBLOCK_INTER_COUNTER).increment(1);
+            context.getCounter(Counter.values()[blockId]).increment(1);
         }
 
         float residualAll = 0.0f;
+
+        Queue<Node> heap = new PriorityQueue<>(2, new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return (int)(o1.getNewPageRank() - o2.getNewPageRank());
+            }
+        });
+
+
         for (Node node : nodesMap.values()) {
             Text valuesOut = new Text(node.getId() + ";" + node.getDesNodeId() + ";" + node.getNewPageRank());
             context.write(new Text(""), valuesOut);
@@ -70,6 +80,8 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             residualAll += Math.abs(node.getOldPageRank() - node.getNewPageRank()) / node.getNewPageRank();
         }
         context.getCounter(Counter.RESIDUAL_COUNTER).increment((long) residualAll * Conf.MULTIPLE);
+
+
     }
 
     protected float iterateBlockOnce(Map<Integer, Node> nodesMap) {
