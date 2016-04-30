@@ -58,19 +58,19 @@ def reformat(input_filepath, output_filepath):
                 if prev_src_node_id != src_node_id:
                     if prev_src_node_id != "-1":
                         output_f.write("{};{};{}\n".format(prev_src_node_id, dest_node_ids, init_pagerank))
-                    # for node_id in xrange(int(prev_src_node_id)+1, int(src_node_id)):   # isolation nodes
-                    #     output_f.write("{};{};{}\n".format(node_id, "", init_pagerank))
+                    for node_id in xrange(int(prev_src_node_id)+1, int(src_node_id)):   # isolation nodes
+                        output_f.write("{};{};{}\n".format(node_id, "", init_pagerank))
                     prev_src_node_id = src_node_id
                     dest_node_ids = dest_node_id
                 else:
                     dest_node_ids += "," + dest_node_id
 
-        # for node_id in xrange(int(prev_src_node_id)+1, int(src_node_id)):   # isolation nodes
-        #     output_f.write("{};{};{}\n".format(node_id, "", init_pagerank))
-        # output_f.write("{};{};{}\n".format(src_node_id, dest_node_ids, init_pagerank))
+        for node_id in xrange(int(prev_src_node_id)+1, int(src_node_id)):   # isolation nodes
+            output_f.write("{};{};{}\n".format(node_id, "", init_pagerank))
+        output_f.write("{};{};{}\n".format(src_node_id, dest_node_ids, init_pagerank))
 
 
 if __name__ == '__main__':
     # reformat('./data/edges.txt', './data/simplepagerank_0')
-    # preprocess('/Users/yhf/Documents/data/edges.txt', '/Users/yhf/Documents/data/filtered_edges.txt', '/Users/yhf/Documents/data/simplepagerank_0')
-    preprocess('./data/edges.txt', './data/filtered_edges.txt', './data/simplepagerank_0')
+    preprocess('/Users/yhf/Documents/data/edges.txt', '/Users/yhf/Documents/data/filtered_edges.txt', '/Users/yhf/Documents/data/simplepagerank_0')
+    # preprocess('./data/edges.txt', './data/filtered_edges.txt', './data/simplepagerank_0')

@@ -1,5 +1,6 @@
 bucket_name=cs5300-project2-hy456
-cluster_id=j-1ARBGJ15MPL9G
+cluster_id=j-11W7FINF3GPYB
+
 
 if [ "$1" != "SimplePageRank" ] && [ "$1" != "BlockPageRank" ] && [ "$1" != "GaussPageRank" ]; then
 	echo "Incorrect argument."
