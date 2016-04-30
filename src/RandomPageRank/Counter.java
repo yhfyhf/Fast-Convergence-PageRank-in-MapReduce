@@ -1,5 +1,4 @@
-package BlockPageRank;
-
+package RandomPageRank;
 /**
  * Created by Christina on 4/30/16.
  */

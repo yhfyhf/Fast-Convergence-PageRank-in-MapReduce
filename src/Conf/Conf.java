@@ -50,7 +50,7 @@ public class Conf {
         return blockid;
     }
 
-    public static String getBlockIdRandom(String nodeId) {
-        return String.valueOf(nodeId.hashCode() % BLOCKS_NUM);
+    public static int getBlockIdRandom(int nodeId) {
+        return String.valueOf(nodeId).hashCode() % BLOCKS_NUM;
     }
 }

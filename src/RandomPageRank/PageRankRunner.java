@@ -1,5 +1,4 @@
-package BlockPageRank;
-
+package RandomPageRank;
 import Conf.Conf;
 import Conf.LoggerConf;
 import org.apache.hadoop.fs.Path;

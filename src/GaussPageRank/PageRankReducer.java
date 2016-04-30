@@ -67,7 +67,6 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
 
         Integer lowestNodeId1 = null, lowestNodeId2 = null;
 
-
         for (Node node : nodesMap.values()) {
             Text valuesOut = new Text(node.getId() + ";" + node.getDesNodeId() + ";" + node.getNewPageRank());
             context.write(new Text(""), valuesOut);
@@ -76,18 +75,17 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
 
             if (lowestNodeId1 == null) {
                 lowestNodeId1 = node.getId();
-            } else if (lowestNodeId2 == null) {
-                lowestNodeId2 = node.getId();
             } else if (nodesMap.get(lowestNodeId1).getNewPageRank() > node.getNewPageRank()) {
                 lowestNodeId2 = lowestNodeId1;
                 lowestNodeId1 = node.getId();
-            } else if (nodesMap.get(lowestNodeId2).getNewPageRank() > node.getNewPageRank()) {
+            } else if (lowestNodeId2 == null || nodesMap.get(lowestNodeId2).getNewPageRank() > node.getNewPageRank()) {
                 lowestNodeId2 = node.getId();
             }
+
         }
         context.getCounter(Counter.RESIDUAL_COUNTER).increment((long) residualAll * Conf.MULTIPLE);
-        context.getCounter(Counter.LOWEST_1).setValue(lowestNodeId1);
-        context.getCounter(Counter.LOWEST_2).setValue(lowestNodeId2);
+        System.out.println("blockId:" + blockId + "  lowest1 nodeId:" + lowestNodeId1 + ", pr:" + nodesMap.get(lowestNodeId1).getNewPageRank());
+        System.out.println("blockId:" + blockId + "  lowest2 nodeId:" + lowestNodeId2 + ", pr:" + nodesMap.get(lowestNodeId2).getNewPageRank());
 
     }
 
@@ -96,7 +94,6 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         for (Node node : nodesMap.values()) {
             startPageRankMap.put(node.getId(), node.getNewPageRank());
         }
-
 
         for (Node v : nodesMap.values()) {
             //BC
@@ -123,9 +120,6 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         return residuals / nodesMap.size();
 
     }
-
-
-
 
 }
 
