@@ -54,6 +54,9 @@ public class PageRankRunner {
                 blockIterNum.put(j, blockIterNum.get(j) + job.getCounters().findCounter(Counter.values()[j]).getValue());
             }
 
+            System.out.println("loweste1: " + job.getCounters().findCounter(Counter.LOWEST_1).getValue());
+            System.out.println("loweste2: " + job.getCounters().findCounter(Counter.LOWEST_2).getValue());
+
 
             if (avgError < threshold) {
                 break;

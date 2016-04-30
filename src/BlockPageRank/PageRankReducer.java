@@ -65,12 +65,7 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
 
         float residualAll = 0.0f;
 
-        Queue<Node> heap = new PriorityQueue<>(2, new Comparator<Node>() {
-            @Override
-            public int compare(Node o1, Node o2) {
-                return (int)(o1.getNewPageRank() - o2.getNewPageRank());
-            }
-        });
+        Integer lowestNodeId1 = null, lowestNodeId2 = null;
 
 
         for (Node node : nodesMap.values()) {
@@ -78,9 +73,21 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             context.write(new Text(""), valuesOut);
 
             residualAll += Math.abs(node.getOldPageRank() - node.getNewPageRank()) / node.getNewPageRank();
+
+            if (lowestNodeId1 == null) {
+                lowestNodeId1 = node.getId();
+            } else if (lowestNodeId2 == null) {
+                lowestNodeId2 = node.getId();
+            } else if (nodesMap.get(lowestNodeId1).getNewPageRank() > node.getNewPageRank()) {
+                lowestNodeId2 = lowestNodeId1;
+                lowestNodeId1 = node.getId();
+            } else if (nodesMap.get(lowestNodeId2).getNewPageRank() > node.getNewPageRank()) {
+                lowestNodeId2 = node.getId();
+            }
         }
         context.getCounter(Counter.RESIDUAL_COUNTER).increment((long) residualAll * Conf.MULTIPLE);
-
+        context.getCounter(Counter.LOWEST_1).setValue(lowestNodeId1);
+        context.getCounter(Counter.LOWEST_2).setValue(lowestNodeId2);
 
     }
 
@@ -102,10 +109,6 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             for (int u : v.getBE()) {
                 v.addNewPageRank(nodesMap.get(u).getNextPageRank());
             }
-
-//            if (v.getId() < 3) {
-//                System.out.println("!!before" + v.getId()+": "+v.getNewPageRank());
-//            }
         }
 
         //damping factor and residual
@@ -115,11 +118,6 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             float startPageRank = startPageRankMap.get(v.getId());
             float endPageRank = v.getNewPageRank();
             residuals += Math.abs(startPageRank - endPageRank) / endPageRank;
-
-//            if (v.getId() < 3) {
-//                System.out.println("!!after" + v.getId()+": "+v.getNewPageRank());
-//            }
-
         }
 
         return residuals / nodesMap.size();
