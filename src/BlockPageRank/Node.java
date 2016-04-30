@@ -1,5 +1,8 @@
 package BlockPageRank;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Christina on 4/16/20.
  */
@@ -13,13 +16,39 @@ public class Node {
     private String desNodeInBlock = "";
     private int degree = 0;
 
+    private List<Integer> BE = new ArrayList<>();
+    private float BC = 0.0f;
+
+    public List<Integer> getBE() {
+        return BE;
+    }
+
+    public void addBE(int u) {
+        BE.add(u);
+    }
+
+
+    public float getBC() {
+        return BC;
+    }
+
+    public void addBC(float BC) {
+        this.BC += BC;
+    }
+
+
     public Node(int id) {
         this.id = id;
     }
 
     public void setDesNodeIds(String desNodeIds) {
         this.desNodeIds = desNodeIds;
-        this.degree = desNodeIds.split(",").length;
+        String[] arr = desNodeIds.split(",");
+        if (arr[0].trim().isEmpty()) {
+            this.degree = 0;
+        } else {
+            this.degree = arr.length;
+        }
     }
 
     public void setOldPageRank(float oldPageRank) {

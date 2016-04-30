@@ -1,9 +1,9 @@
 package BlockPageRank;
 
 /**
- * Created by Christina on 4/20/16.
+ * Created by Christina on 4/30/16.
  */
-public enum Counter {
-    RESIDUAL_COUNTER,
-    INBLOCK_INTER_COUNTER
+public enum  Counter {
+    INBLOCK_INTER_COUNTER,
+    RESIDUAL_COUNTER
 }

@@ -1,5 +1,6 @@
 package BlockPageRank;
 
+import Conf.Conf;
 import Conf.LoggerConf;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -17,19 +18,17 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
 
     /**
      * keyIn:
-     * valueIn: srcNodeId;desNodeId1,desNodeId2...;srcNodePageRank;
+     * valueIn: uId;vId1, vId2, ...;pageRank;
      *
-     * keyOut: blockId
-     * valueOut: NEXTPAGERANK_FROM_INBLOCK;desNodeId;nextPageRank;
-     * Or
-     * keyOut: blockId
-     * valueOut: NEXTPAGERANK_FROM_OUTBLOCK;desNodeId;nextPageRank;
-     * Or
-     * keyOut: blockId
-     * valueOut: NODEINFO;srcNodeId;desNodeId1,desNodeId2...;srcOldNodePageRank;
-     * Or
-     * keyOut:blockId
-     * valueOut: EDGE_INCBLOCK;srcNodeId;desNodeIdInBlock1,desNodeIdInBlock2...;
+     * KeyOut: blockId
+     * valueOut: BE;vId;uId;NextPageRank
+     *
+     * KeyOut: blockId
+     * valueOut: BC;vId;NextPageRank
+     *
+     * KeyOut: blockId
+     * valueOut:NODEINFO;uId;vId1, vId2, ...;pageRank;
+     *
      */
     public void map(LongWritable keyIn, Text valueIn, Mapper.Context context)
             throws IOException, InterruptedException {
@@ -40,51 +39,38 @@ public class PageRankMapper extends Mapper<LongWritable, Text, Text, Text> {
             return;
         }
 
-        String srcNodeId = tokens[0].trim();
-        String[] desNodeIds = tokens[1].trim().split(",");
-        float srcNodePageRank = Float.parseFloat(tokens[2].trim());
-        int srcNodeDegree = desNodeIds.length;
-        float nextPageRank = srcNodePageRank / srcNodeDegree;
-        String srcBlockId = getBlockId(srcNodeId);
-        String edgeInBlock = "";
+        int uId = Integer.valueOf(tokens[0].trim());
+        String[] vIdsStr = tokens[1].trim().split(",");
+        float pageRank = Float.parseFloat(tokens[2].trim());
+        int degree = vIdsStr.length;
+        float nextPageRank = pageRank / degree;
+        int uBlockId = getBlockId(uId);
+
+        Text keyOut = new Text(String.valueOf(uBlockId));
+        Text valueOut;
 
         // Emit the node info
-        Text keyOut = new Text(srcBlockId);
-        Text valueOut = new Text(Conf.Conf.NODEINFO + ";" + tokens[0] + ";" + tokens[1] + ";" + tokens[2] + ";");
-        context.write(keyOut, valueOut);
-        log.info("[ PRMapper ] key: " + keyOut + ", value: " + valueOut);
+        valueOut = new Text(Conf.NODEINFO + ";" + valueIn.toString());
+        context.write(keyOut,valueOut);
 
-        // Emit nextPageRank
-        for (String desNodeId : desNodeIds) {
-            if (desNodeId.isEmpty()) {
-                break;
-            }
-            String desBlockId = getBlockId(desNodeId);
-            keyOut = new Text(desBlockId);
-            if (srcBlockId.equals(desBlockId)) {
-                edgeInBlock += desNodeId + ",";
-                valueOut = new Text(Conf.Conf.NEXTPAGERANK_FROM_INBLOCK +";" + desNodeId + ";" + nextPageRank + ";");
-            } else {
-                valueOut = new Text(Conf.Conf.NEXTPAGERANK_FROM_OUTBLOCK +";" + desNodeId + ";" + nextPageRank + ";");
-
-                if (desNodeId.equals("0")) {
-                    System.out.println("!! from:" + srcNodeId + ", pr:" + nextPageRank);
+        // Emit BE and BC
+        if (!vIdsStr[0].isEmpty()) {
+            for (String vIdStr : vIdsStr) {
+                int vId = Integer.parseInt(vIdStr);
+                int vBlockId = getBlockId(vId);
+                keyOut = new Text(String.valueOf(vBlockId));
+                if (vBlockId == uBlockId) {
+                    valueOut = new Text(Conf.BE + ";" + vId + ";" + uId + ";");
+                } else {
+                    valueOut = new Text(Conf.BC + ";" + vId + ";" + nextPageRank + ";");
                 }
-
-
+                context.write(keyOut, valueOut);
             }
-            context.write(keyOut, valueOut);
-//            log.info("[ PRMapper ] key: " + keyOut + ", value: " + valueOut);
         }
 
-        // Emit the edge in block
-        keyOut = new Text(srcBlockId);
-        valueOut = new Text(Conf.Conf.EDGE_INCBLOCK + ";" + srcNodeId + ";" + edgeInBlock + ";");
-        context.write(keyOut, valueOut);
-        log.info("[ PRMapper ] key: " + keyOut + ", value: " + valueOut);
     }
 
-    protected String getBlockId(String nodeId) {
-        return Conf.Conf.getBlockId(nodeId);
+    protected int getBlockId(int nodeId) {
+        return Conf.getBlockId(nodeId);
     }
 }

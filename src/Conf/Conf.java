@@ -13,6 +13,11 @@ public class Conf {
     public static final int NEXTPAGERANK_FROM_OUTBLOCK = 5;
 
 
+    public static final int BE = 111;
+    public static final int BC = 101;
+
+
+
     public static final int NODES_NUM = 685230;
     public static final int BLOCKS_NUM = 68;
     public static final int MAPREDUCE_ITERATION = 8;
@@ -35,11 +40,14 @@ public class Conf {
             534709, 545088, 555467, 565846, 576225, 586604, 596585, 606367,
             616148, 626448, 636240, 646022, 655804, 665666, 675448, 685230 };
 
-    public static String getBlockId(String nodeId) {
-        int nodeIdInt = Integer.parseInt(nodeId);
-        int blockId = (int) Math.floor(nodeIdInt / 10000);
-        blockId = nodeIdInt < BLOCK_BOUNDARIES[blockId] ? blockId - 1 : blockId;
-        return String.valueOf(blockId);
+    public static int getBlockId(int nodeId) {
+        int blockid = (int) Math.floor(nodeId / 10000);
+        int boundary = BLOCK_BOUNDARIES[blockid];
+        if (nodeId < boundary) {
+            blockid--;
+        }
+
+        return blockid;
     }
 
     public static String getBlockIdRandom(String nodeId) {
