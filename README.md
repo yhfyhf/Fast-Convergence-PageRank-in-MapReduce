@@ -29,7 +29,6 @@ valueOut: srcNodeId;desNodeId1,desNodeId2...;srcNodeDegree;srcNodePageRank;
 ```
 
 **PageRankRunner.java**
-
 Set the input and output path from arguments, and run the hadoop jobs for 5 iterations.
 
 **Counter.java**
@@ -40,25 +39,46 @@ Store the residual value in reducer in each iteraction.
 
 **PageRankMapper.java**  
 
+```
+keyIn:
+valueIn: uId;vId1, vId2, ...;pageRank;
+
+KeyOut: blockId
+valueOut: BE;vId;uId;NextPageRank
+Or
+KeyOut: blockId
+valueOut: BC;vId;NextPageRank
+Or
+KeyOut: blockId
+valueOut:NODEINFO;uId;vId1, vId2, ...;pageRank;
+```
+
 **PageRankReducer.java**
+```
+KeyIn: blockId
+valueIn: BE;vId;uId;
+Or
+KeyIn: blockId
+valueIn: BC;vId;NextPageRank
+Or
+KeyIn: blockId
+valueIn: NODEINFO;uId;vId1, vId2, ...;pageRank;
+
+KeyOut:
+ValueOut: uId;vId1, vId2, ...;pageRank;
+```
 
 **PageRankRunner.java**
+Set the input and output path from arguments, and run the hadoop jobs untill the residual error becomes less than 0.001.
 
 **Counter.java**
+Store the residual value in reducer and the number of inblock iteration in each iteraction.
 
 **Node.java**
+Store the information of the node.
 
 ### Gauss-Seidel PageRank
-
-**PageRankMapper.java**  
-
-**PageRankReducer.java**
-
-**PageRankRunner.java**
-
-**Counter.java**
-
-**Node.java**
+The java file functions are the same with the Block PageRank
 
 
 # Usage
