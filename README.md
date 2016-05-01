@@ -1,3 +1,8 @@
+# CS5300 Project 2
+
+## Haonan Liu(hl955), Youdan Xu(yx339), Haofei Ying(hy456) 
+
+
 # Overall Structure
 
 ### Simple PageRank
@@ -54,6 +59,7 @@ valueOut:NODEINFO;uId;vId1, vId2, ...;pageRank;
 ```
 
 **PageRankReducer.java**
+
 ```
 KeyIn: blockId
 valueIn: BE;vId;uId;
@@ -83,39 +89,25 @@ The java file functions are the same with the Block PageRank
 
 # Usage
 
-1. First, run the `preprocess.py` script to get a pre-filtered data set. In the main method, you need to specify input and output filepaths. It will generate a file named `simplepagerank_0`.
+1. First, run the `preprocess.py` script to get a pre-filtered data set. In the `main` method, you need to **specify input and output filepaths**. It will generate a file named `simplepagerank_0`.
 
 	The NetID used to filter out edges is `hy456`. Thus, `rejectMin = 0.654 * 0.9 = 0.5886`, `rejectLimit = rejectMin + 0.01 = 0.5986`. Edges actually selected in our graph is `7524427`.
 
-2. Then, upload the pre-filterd file `simplepagerank_0` to AWS S3 bucket.
+2. Then, upload the pre-filterd file `simplepagerank_0` to AWS S3 bucket under path `/data/`.
 
 3. Compile the java source code and archive classes into jar file.
 
 	```
-	./deploy.sh SimplePageRank
-	```
-	
-	```
-	./deploy.sh BlockPageRank
-	```
-	
-	```
-	./deploy.sh GaussPageRank
+	./deploy.sh [ SimplePageRank | BlockPageRank | GaussPageRank | RandomPageRank ]
 	```
 
-	Clean all the compiled files.
+	Clean all the compiled files and delete the existing input and output paths on S3.
 	
 	```
-	./clean.sh SimplePageRank
+	./clean.sh [ SimplePageRank | BlockPageRank | GaussPageRank | RandomPageRank ]
 	```
 	
-	```
-	./clean.sh BlockPageRank
-	```
-	
-	```
-	./clean.sh GaussPageRank
-	```
+	**NOTE:**  You need to specify your `bucket_name` and `cluster_id` in `deploy.sh` before executing it. Also, you need to execute `clean.sh` to avoid the `FileAlreadyExistsException`.
 
 
 # Results
@@ -358,7 +350,6 @@ blockId:8  nodeId:80118, pr:5.3006863E-7
 blockId:8  nodeId:80119, pr:9.80627E-7
 blockId:9  nodeId:90497, pr:9.155742E-7
 blockId:9  nodeId:90498, pr:1.1305711E-5
-
 ```
 
 ### Gauss PageRank
@@ -588,8 +579,4 @@ blockId:8  nodeId:80118, pr:2.1890456E-7
 blockId:8  nodeId:80119, pr:2.1890456E-7
 blockId:9  nodeId:90497, pr:2.1890456E-7
 blockId:9  nodeId:90498, pr:9.941915E-7
-
-
-
-
 ```

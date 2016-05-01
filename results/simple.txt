@@ -1,0 +1,5 @@
+Iteration 0 avg error 2.338487e+00
+Iteration 1 avg error 3.230211e-01
+Iteration 2 avg error 1.920783e-01
+Iteration 3 avg error 9.410072e-02
+Iteration 4 avg error 6.282157e-02
