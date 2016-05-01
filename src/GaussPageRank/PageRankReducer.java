@@ -81,11 +81,16 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             } else if (lowestNodeId2 == null || lowestNodeId2 > node.getId()) {
                 lowestNodeId2 = node.getId();
             }
-
         }
+<<<<<<< HEAD
         context.getCounter(Counter.RESIDUAL_COUNTER).increment((long) residualAll * Conf.MULTIPLE);
         System.out.println("blockId:" + blockId + "  nodeId:" + lowestNodeId1 + ", pr:" + nodesMap.get(lowestNodeId1).getNewPageRank());
         System.out.println("blockId:" + blockId + "  nodeId:" + lowestNodeId2 + ", pr:" + nodesMap.get(lowestNodeId2).getNewPageRank());
+=======
+        System.out.println("blockId:" + blockId + "  lowest1 nodeId:" + lowestNodeId1 + ", pr:" + nodesMap.get(lowestNodeId1).getNewPageRank());
+        System.out.println("blockId:" + blockId + "  lowest2 nodeId:" + lowestNodeId2 + ", pr:" + nodesMap.get(lowestNodeId2).getNewPageRank());
+        context.getCounter(Counter.RESIDUAL_COUNTER).increment((long) residualAll * Conf.MULTIPLE);
+>>>>>>> b62316be57ac3458953569a54f81756755b6dad3
     }
 
     protected float iterateBlockOnce(Map<Integer, Node> nodesMap) {
