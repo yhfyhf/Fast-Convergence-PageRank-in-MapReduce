@@ -65,7 +65,6 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
         float residualAll = 0.0f;
 
         Integer lowestNodeId1 = null, lowestNodeId2 = null;
-
         for (Node node : nodesMap.values()) {
             Text valuesOut = new Text(node.getId() + ";" + node.getDesNodeId() + ";" + node.getNewPageRank());
             context.write(new Text(""), valuesOut);
@@ -74,17 +73,18 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
 
             if (lowestNodeId1 == null) {
                 lowestNodeId1 = node.getId();
-            } else if (nodesMap.get(lowestNodeId1).getNewPageRank() > node.getNewPageRank()) {
+            } else if (lowestNodeId1 > node.getId()) {
                 lowestNodeId2 = lowestNodeId1;
                 lowestNodeId1 = node.getId();
-            } else if (lowestNodeId2 == null || nodesMap.get(lowestNodeId2).getNewPageRank() > node.getNewPageRank()) {
+            } else if (lowestNodeId2 == null || lowestNodeId2 > node.getId()) {
                 lowestNodeId2 = node.getId();
             }
 
         }
         context.getCounter(Counter.RESIDUAL_COUNTER).increment((long) residualAll * Conf.MULTIPLE);
-        System.out.println("blockId:" + blockId + "  lowest1 nodeId:" + lowestNodeId1 + ", pr:" + nodesMap.get(lowestNodeId1).getNewPageRank());
-        System.out.println("blockId:" + blockId + "  lowest2 nodeId:" + lowestNodeId2 + ", pr:" + nodesMap.get(lowestNodeId2).getNewPageRank());
+        System.out.println("blockId:" + blockId + "  nodeId:" + lowestNodeId1 + ", pr:" + nodesMap.get(lowestNodeId1).getNewPageRank());
+        System.out.println("blockId:" + blockId + "  nodeId:" + lowestNodeId2 + ", pr:" + nodesMap.get(lowestNodeId2).getNewPageRank());
+
     }
 
     protected float iterateBlockOnce(Map<Integer, Node> nodesMap) {
