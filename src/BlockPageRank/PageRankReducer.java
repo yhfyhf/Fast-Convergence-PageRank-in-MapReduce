@@ -20,7 +20,10 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
      * valueIn: BC;vId;NextPageRank
      *
      * KeyIn: blockId
-     * valueIn:NODEINFO;uId;vId1, vId2, ...;pageRank;
+     * valueIn: NODEINFO;uId;vId1, vId2, ...;pageRank;
+     *
+     * KeyOur:
+     * ValueOut: uId;vId1, vId2, ...;pageRank;
      *
      */
     protected void reduce(Text keyIn, Iterable<Text> valuesIn, Context context)
