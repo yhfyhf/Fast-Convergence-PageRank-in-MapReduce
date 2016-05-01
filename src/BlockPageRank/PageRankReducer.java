@@ -97,7 +97,6 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             }
         }
 
-
         for (Node v : nodesMap.values()) {
             //BC
             v.setNewPageRank(v.getBC());
@@ -116,15 +115,6 @@ public class PageRankReducer extends Reducer<Text, Text, Text, Text> {
             float endPageRank = v.getNewPageRank();
             residuals += Math.abs(startPageRank - endPageRank) / endPageRank;
         }
-
         return residuals / nodesMap.size();
-
     }
-
-
-
-
 }
-
-
-
