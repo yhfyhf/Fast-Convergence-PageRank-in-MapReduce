@@ -84,7 +84,10 @@ Store the residual value in reducer and the number of inblock iteration in each 
 Store the information of the node.
 
 ### Gauss-Seidel PageRank
-The java file functions are the same with the Block PageRank
+The java file functions are the same with the Block PageRank.
+
+### Random PageRank
+The java file functions are the same with the Block PageRank.
 
 
 # Usage
@@ -579,4 +582,19 @@ blockId:8  nodeId:80118, pr:2.1890456E-7
 blockId:8  nodeId:80119, pr:2.1890456E-7
 blockId:9  nodeId:90497, pr:2.1890456E-7
 blockId:9  nodeId:90498, pr:9.941915E-7
+```
+
+
+### Random PageRank:
+
+```
+Average residual error
+Iteration 0 avg error 2.327331e+00
+Iteration 1 avg error 3.221458e-01
+Iteration 2 avg error 1.906236e-01
+Iteration 3 avg error 9.294543e-02
+Iteration 4 avg error 6.163624e-02
+Iteration 5 avg error 3.319469e-02
+Iteration 6 avg error 2.640865e-02
+Iteration 7 avg error 1.614786e-02
 ```
