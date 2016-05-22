@@ -1,6 +1,6 @@
-# CS5300 Project 2
+# Fast Convergence PageRank in MapReduce
 
-## Haonan Liu(hl955), Youdan Xu(yx339), Haofei Ying(hy456) 
+## Compute PageRank of a large scale web graph in MapReduce with Hadoop.
 
 
 # Overall Structure
